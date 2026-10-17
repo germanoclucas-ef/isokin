@@ -1639,7 +1639,7 @@
 
     function openAiModal() {
       document.getElementById('ai-api-key').value = localStorage.getItem('isokin_gemini_key') || '';
-      document.getElementById('ai-model').value = localStorage.getItem('isokin_gemini_model') || 'gemini-2.5-flash';
+      document.getElementById('ai-model').value = localStorage.getItem('isokin_gemini_model') || 'gemini-3.8-flash';
       document.getElementById('ai-modal').classList.remove('hidden');
     }
 
@@ -1658,7 +1658,7 @@
     // CHAMADA ROBUSTA À API GEMINI (COMPATÍVEL COM CHAVES AQ.)
     async function generateAiReport() {
       let apiKey = (localStorage.getItem('isokin_gemini_key') || '').trim();
-      let model = localStorage.getItem('isokin_gemini_model') || 'gemini-2.5-flash';
+      let model = localStorage.getItem('isokin_gemini_model') || 'gemini-3.8-flash';
 
       if (!apiKey) {
         alert('Por favor, configure sua Chave de API no botão "AI Studio API" no topo antes de gerar.');
