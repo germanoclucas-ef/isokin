@@ -1705,7 +1705,7 @@
         }
       };
 
-      const promptText = `Você é um especialista em biomecânica e avaliação neuromuscular com dinamometria/balança de tração isométrica. Analise os dados da bateria abaixo e emita um parecer clínico e prescritivo objetivo fundamentado na literatura científica (ACSM, Croisier, critérios de simetria):\n\n${JSON.stringify(payload, null, 2)}`;
+      const promptText = `Você é um especialista em biomecânica e avaliação neuromuscular. Analise os dados da bateria abaixo e elabore um parecer clínico direto, legível e profissional. REGRAS OBRIGATÓRIAS DE FORMATAÇÃO: 1. NUNCA use LaTeX, cifrões ($), barras ou fórmulas matemáticas (escreva sempre texto limpo como "32 kg", "40%", "graus"). 2. NÃO use tabelas Markdown (use tópicos claros e diretos com marcadores). 3. Use parágrafos objetivos e destaques em negrito simples:\n\n${JSON.stringify(payload, null, 2)}`;
 
       try {
         // Envio via endpoint nativo com o cabeçalho x-goog-api-key para suporte total a chaves AQ.
@@ -1728,10 +1728,18 @@
         }
 
         if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
+        let rawText = data.candidates[0].content.parts[0].text;
+          // Limpa símbolos LaTeX ($e \text{}) caso a IA tente colocar let cleanText = rawText .replace(/\$+\\text\{([^}]+)\}\$+/g, '$1')
+            .replace(/\$+/g, '')
+            .replace(/\\text\{([^}]+)\}/g, '$1')
+            .replace(/\\ge/g, '≥')
+            .replace(/\\le/g, '≤')
+            .replace(/\\circ/g, '°');
+
           document.getElementById('diagnostic-text').innerHTML = `
             <div class="border-l-4 border-brand-500 pl-3 py-1 bg-dark-900 rounded">
               <span class="text-xs font-mono font-bold text-brand-400 uppercase tracking-wide block mb-1">Parecer Gerado via Gemini (${model}):</span>
-              <div class="text-slate-200 whitespace-pre-line text-xs sm:text-sm leading-relaxed">${data.candidates[0].content.parts[0].text}</div>
+              <div class="text-slate-200 whitespace-pre-line text-xs sm:text-sm leading-relaxed">${cleanText}</div>
             </div>
           `;
         } else {
