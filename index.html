@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ISOKIN FORCE LAB - Bateria Neuromuscular</title>
+  <title>ISOKIN FORCE LAB - Bateria Neuromuscular Completa</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Google Fonts Inter & JetBrains Mono -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -49,21 +49,17 @@
   </script>
 
   <style>
-    /* Estilos de Impressão (Laudo A4) */
     @media print {
-      body { background-color: #ffffff !important; color: #000000 !important; font-size: 11pt; }
+      body { background-color: #ffffff !important; color: #000000 !important; font-size: 10pt; }
       .no-print { display: none !important; }
       .print-only { display: block !important; }
-      .print-page { page-break-after: always; padding: 20px; }
-      .card-print { border: 1px solid #d1d5db !important; background: transparent !important; color: #000 !important; }
+      .card-print { border: 1px solid #ccc !important; background: transparent !important; color: #000 !important; }
       .card-print * { color: #000 !important; }
-      .chart-container-print { height: 260px !important; }
     }
     .print-only { display: none; }
     
-    /* Touch targets confortáveis para Mobile */
     input[type="number"], select, button {
-      min-height: 42px;
+      min-height: 40px;
     }
     input[type=number]::-webkit-inner-spin-button, 
     input[type=number]::-webkit-outer-spin-button { 
@@ -79,18 +75,27 @@
 <body class="bg-dark-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-brand-600 selection:text-white">
 
   <!-- CABEÇALHO -->
-  <header class="bg-dark-900/95 border-b border-dark-700/80 sticky top-0 z-30 backdrop-blur-md px-4 lg:px-8 py-3 transition-all no-print">
+  <header class="bg-dark-900/95 border-b border-dark-700/80 sticky top-0 z-30 backdrop-blur-md px-4 lg:px-8 py-2.5 transition-all no-print">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
       
       <div class="flex items-center justify-between w-full sm:w-auto">
         <div class="flex items-center gap-3">
-          <!-- Ícone original ISOKIN da referência -->
-       <img src="logo.png" alt="ISOKIN Logo" class="w-10 h-10 rounded-xl object-contain shadow-lg shadow-brand-950/60 border border-brand-500/40 p-1 bg-dark-900">
+          <!-- Ícone PNG customizado carregado do repositório -->
+          <img src="logo.png" onerror="this.style.display='none'; document.getElementById('fallback-logo').style.display='flex';" alt="ISOKIN Logo" class="w-10 h-10 rounded-xl object-contain shadow-lg shadow-brand-950/60 border border-brand-500/40 p-1 bg-dark-900">
+          
+          <div id="fallback-logo" style="display:none;" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 via-brand-600 to-amber-500 items-center justify-center shadow-lg shadow-brand-950/60 border border-brand-500/40 p-1.5">
+            <svg class="w-full h-full text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2C8.5 2 6 4.5 6 7.5c0 4 6 5 6 9 0 3-2.5 5.5-6 5.5"/>
+              <circle cx="12" cy="7.5" r="1.5" fill="currentColor"/>
+              <circle cx="6" cy="22" r="1.5" fill="currentColor"/>
+            </svg>
+          </div>
+
           <div>
             <h1 class="text-lg font-black tracking-wider text-white flex items-center gap-1.5">
               ISOKIN <span class="text-brand-400 text-xs font-mono font-bold px-1.5 py-0.5 rounded bg-brand-950/90 border border-brand-800">SESSION LAB</span>
             </h1>
-            <p class="text-[10px] text-rose-300/70 font-mono tracking-tight uppercase">Bateria Neuromuscular Completa em Mesma Sessão</p>
+            <p class="text-[10px] text-rose-300/70 font-mono tracking-tight uppercase">Bateria Neuromuscular Multiarticular</p>
           </div>
         </div>
 
@@ -106,7 +111,7 @@
       <nav class="hidden sm:flex items-center gap-1.5 bg-dark-850 p-1.5 rounded-xl border border-dark-700">
         <button onclick="switchTab('evaluation')" id="tab-btn-eval" class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold bg-brand-600 text-white shadow-md shadow-brand-950/50 transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-          Nova Avaliação
+          Avaliação
         </button>
         <button onclick="switchTab('students')" id="tab-btn-students" class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
@@ -126,7 +131,7 @@
         </button>
         <button onclick="window.print()" class="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-gradient-to-r from-brand-600 to-rose-600 hover:from-brand-500 hover:to-rose-500 text-white text-xs font-semibold shadow-lg shadow-brand-950/60 transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-          <span class="hidden md:inline">Gerar Laudo Clínico / PDF</span>
+          <span class="hidden md:inline">Gerar Laudo / PDF</span>
         </button>
       </div>
 
@@ -137,7 +142,7 @@
   <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
 
     <!-- ========================================== -->
-    <!-- ABA 1: NOVA AVALIAÇÃO                      -->
+    <!-- ABA 1: AVALIAÇÃO                           -->
     <!-- ========================================== -->
     <div id="tab-evaluation" class="space-y-6">
       
@@ -147,9 +152,9 @@
           <div>
             <h2 class="text-sm font-bold text-white tracking-wide uppercase flex items-center gap-2">
               <span class="w-2.5 h-2.5 rounded-full bg-brand-500 shadow-sm shadow-brand-500"></span> 
-              Identificação & Contextualização
+              Identificação do Avaliado
             </h2>
-            <p class="text-xs text-slate-400">Selecione um aluno cadastrado ou preencha diretamente</p>
+            <p class="text-xs text-slate-400">Selecione um aluno da base ou preencha a ficha avulsa</p>
           </div>
           <div class="flex items-center gap-2">
             <select id="quick-student-select" onchange="loadStudentToEval(this.value)" class="bg-dark-900 border border-dark-600 text-xs rounded-xl px-3 py-2 text-slate-200 focus:border-brand-500 focus:outline-none w-full sm:w-64 font-medium">
@@ -159,25 +164,21 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <!-- Nome -->
           <div class="space-y-1.5">
             <label class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-wider">Nome Completo</label>
             <input type="text" id="eval-name" placeholder="Ex: Lucas Vasconcelos" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3.5 py-2 text-sm text-white focus:border-brand-500 focus:outline-none transition">
           </div>
 
-          <!-- Data -->
           <div class="space-y-1.5">
             <label class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-wider">Data do Teste</label>
             <input type="date" id="eval-date" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3.5 py-2 text-sm text-white focus:border-brand-500 focus:outline-none transition font-mono">
           </div>
 
-          <!-- Peso -->
           <div class="space-y-1.5">
             <label class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-wider">Massa Corporal (kg)</label>
             <input type="number" id="eval-weight" inputmode="decimal" step="0.1" placeholder="Ex: 78.0" oninput="calculateAll()" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3.5 py-2 text-sm text-white focus:border-brand-500 focus:outline-none transition font-mono">
           </div>
 
-          <!-- Idade & Sexo -->
           <div class="grid grid-cols-2 gap-2">
             <div class="space-y-1.5">
               <label class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-wider">Idade</label>
@@ -193,9 +194,7 @@
           </div>
         </div>
 
-        <!-- Menus Suspensos de Modalidade & Contexto -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 pt-4 border-t border-dark-700/70">
-          
           <div class="space-y-1.5">
             <label class="text-[11px] font-semibold text-slate-300 uppercase tracking-wider flex items-center justify-between">
               <span>Modalidade Primária</span>
@@ -209,8 +208,8 @@
               </optgroup>
               <optgroup label="Esportes Coletivos & Corrida">
                 <option value="soccer">Futebol / Futebol Society</option>
-                <option value="running">Corrida de Rua / Maratona / Pista</option>
-                <option value="basketball">Basquetebol / Voleibol (Saltos)</option>
+                <option value="running">Corrida de Rua / Atletismo</option>
+                <option value="basketball">Basquetebol / Voleibol</option>
               </optgroup>
               <optgroup label="Artes Marciais & Luta">
                 <option value="bjj">Brazilian Jiu-Jitsu (BJJ)</option>
@@ -220,7 +219,7 @@
               <optgroup label="Força & Condicionamento">
                 <option value="bodybuilding">Musculação / Hipertrofia</option>
                 <option value="crossfit">Cross Training / Funcional Intenso</option>
-                <option value="powerlifting">Powerlifting / Levantamento de Peso</option>
+                <option value="powerlifting">Powerlifting / LPO</option>
               </optgroup>
             </select>
           </div>
@@ -228,7 +227,7 @@
           <div class="space-y-1.5">
             <label class="text-[11px] font-semibold text-slate-300 uppercase tracking-wider flex items-center justify-between">
               <span>Contexto Clínico & Tolerância de Assimetria</span>
-              <span class="text-[10px] text-emerald-400 font-mono">Evidência Científica</span>
+              <span class="text-[10px] text-emerald-400 font-mono">Critérios Evidenciados</span>
             </label>
             <select id="eval-context" onchange="calculateAll()" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-brand-500 focus:outline-none transition font-medium">
               <optgroup label="Saúde & Prevenção">
@@ -240,191 +239,426 @@
                 <option value="acl">Pós-Op LCA / Reconstrução Ligamentar (Critério Grindem / LSI ≥ 90%)</option>
                 <option value="hamstring_injury">Pós-Lesão de Isquiotibiais (Critérios Croisier / Razão I:Q)</option>
                 <option value="tendinopathy">Tendinopatia Patelar / Aquiles (Capacidade de Carga Isométrica)</option>
-                <option value="joint_instability">Instabilidade Articular Pós-Entorse</option>
+                <option value="shoulder_instability">Instabilidade Glenoumeral / Manguito Rotador</option>
               </optgroup>
             </select>
           </div>
-
         </div>
       </div>
 
-      <!-- ÁREA DE COLETA COM TEMA VERMELHO ESCURO / DOURADO -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-        <!-- GRUPO 1: ISQUIOTIBIAIS (FLEXORES) -->
-        <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-4 sm:p-5 shadow-xl relative overflow-hidden">
-          <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-500"></div>
-          <div class="flex items-center justify-between mb-4 pl-2">
-            <div>
-              <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-brand-500"></span>
-                Grupo 1: Flexão de Joelho (Isquiotibiais)
-              </h3>
-              <p class="text-xs text-slate-400">3 tentativas com balança de tração na mesma sessão</p>
-            </div>
-            <span class="text-[11px] font-mono bg-dark-900 text-amber-400 border border-amber-900/40 px-2.5 py-0.5 rounded-md font-semibold">Exemplo Típico</span>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <!-- Esquerdo -->
-            <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
-              <span class="text-xs font-bold text-slate-300 block mb-2 uppercase tracking-wide">Lado Esquerdo (E)</span>
-              <div class="grid grid-cols-3 gap-2">
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T1:</label>
-                  <input type="number" id="ham-l1" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-brand-500 focus:outline-none font-mono">
-                </div>
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T2:</label>
-                  <input type="number" id="ham-l2" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-brand-500 focus:outline-none font-mono">
-                </div>
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T3:</label>
-                  <input type="number" id="ham-l3" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-brand-500 focus:outline-none font-mono">
-                </div>
-              </div>
-              <div class="mt-2.5 pt-2 border-t border-dark-700/80 flex justify-between items-center text-xs">
-                <span class="text-slate-400 font-mono">Pico:</span>
-                <span id="ham-l-peak" class="font-bold text-brand-400 font-mono text-sm">0.0 kg</span>
-              </div>
-            </div>
-
-            <!-- Direito -->
-            <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
-              <span class="text-xs font-bold text-slate-300 block mb-2 uppercase tracking-wide">Lado Direito (D)</span>
-              <div class="grid grid-cols-3 gap-2">
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T1:</label>
-                  <input type="number" id="ham-r1" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-brand-500 focus:outline-none font-mono">
-                </div>
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T2:</label>
-                  <input type="number" id="ham-r2" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-brand-500 focus:outline-none font-mono">
-                </div>
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T3:</label>
-                  <input type="number" id="ham-r3" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-brand-500 focus:outline-none font-mono">
-                </div>
-              </div>
-              <div class="mt-2.5 pt-2 border-t border-dark-700/80 flex justify-between items-center text-xs">
-                <span class="text-slate-400 font-mono">Pico:</span>
-                <span id="ham-r-peak" class="font-bold text-brand-400 font-mono text-sm">0.0 kg</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-4 p-3 bg-dark-900 rounded-xl border border-dark-700 flex items-center justify-between">
-            <span class="text-xs font-semibold text-slate-300">Défice Bilateral Isquiotibiais:</span>
-            <span id="ham-asym-badge" class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-dark-800 text-slate-400">0.0% (Equilibrado)</span>
-          </div>
+      <!-- BARRA DE SELEÇÃO RÁPIDA DE ARTICULAÇÃO -->
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-dark-850 p-3 rounded-2xl border border-dark-700/80">
+        <div class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+          <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+          Exibir Articulações no Painel:
         </div>
-
-        <!-- GRUPO 2: QUADRÍCEPS (EXTENSORES) -->
-        <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-4 sm:p-5 shadow-xl relative overflow-hidden">
-          <div class="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
-          <div class="flex items-center justify-between mb-4 pl-2">
-            <div>
-              <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                Grupo 2: Extensão de Joelho (Quadríceps)
-              </h3>
-              <p class="text-xs text-slate-400">3 tentativas com a mesma balança de tração</p>
-            </div>
-            <span class="text-[11px] font-mono bg-dark-900 text-amber-400 border border-amber-900/40 px-2.5 py-0.5 rounded-md font-semibold">Exemplo Típico</span>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <!-- Esquerdo -->
-            <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
-              <span class="text-xs font-bold text-slate-300 block mb-2 uppercase tracking-wide">Lado Esquerdo (E)</span>
-              <div class="grid grid-cols-3 gap-2">
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T1:</label>
-                  <input type="number" id="quad-l1" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-amber-500 focus:outline-none font-mono">
-                </div>
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T2:</label>
-                  <input type="number" id="quad-l2" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-amber-500 focus:outline-none font-mono">
-                </div>
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T3:</label>
-                  <input type="number" id="quad-l3" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-amber-500 focus:outline-none font-mono">
-                </div>
-              </div>
-              <div class="mt-2.5 pt-2 border-t border-dark-700/80 flex justify-between items-center text-xs">
-                <span class="text-slate-400 font-mono">Pico:</span>
-                <span id="quad-l-peak" class="font-bold text-amber-400 font-mono text-sm">0.0 kg</span>
-              </div>
-            </div>
-
-            <!-- Direito -->
-            <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
-              <span class="text-xs font-bold text-slate-300 block mb-2 uppercase tracking-wide">Lado Direito (D)</span>
-              <div class="grid grid-cols-3 gap-2">
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T1:</label>
-                  <input type="number" id="quad-r1" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-amber-500 focus:outline-none font-mono">
-                </div>
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T2:</label>
-                  <input type="number" id="quad-r2" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-amber-500 focus:outline-none font-mono">
-                </div>
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T3:</label>
-                  <input type="number" id="quad-r3" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-amber-500 focus:outline-none font-mono">
-                </div>
-              </div>
-              <div class="mt-2.5 pt-2 border-t border-dark-700/80 flex justify-between items-center text-xs">
-                <span class="text-slate-400 font-mono">Pico:</span>
-                <span id="quad-r-peak" class="font-bold text-amber-400 font-mono text-sm">0.0 kg</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-4 p-3 bg-dark-900 rounded-xl border border-dark-700 flex items-center justify-between">
-            <span class="text-xs font-semibold text-slate-300">Défice Bilateral Quadríceps:</span>
-            <span id="quad-asym-badge" class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-dark-800 text-slate-400">0.0% (Equilibrado)</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- EQUILÍBRIO DA SESSÃO & RAZÃO I:Q -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-dark-850 p-4 rounded-2xl border border-dark-700/80 shadow-md">
-          <div class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-wider mb-1">Razão I:Q Lado E</div>
-          <div class="flex items-baseline gap-2">
-            <span id="ratio-l-val" class="text-2xl font-black font-mono text-brand-400">0.0%</span>
-            <span id="ratio-l-status" class="text-xs font-semibold px-2 py-0.5 rounded bg-dark-900 text-slate-400 border border-dark-700">Sem dados</span>
-          </div>
-          <p class="text-[10px] text-slate-400 mt-2">Ref. Ideal: 55% - 65%</p>
-        </div>
-
-        <div class="bg-dark-850 p-4 rounded-2xl border border-dark-700/80 shadow-md">
-          <div class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-wider mb-1">Razão I:Q Lado D</div>
-          <div class="flex items-baseline gap-2">
-            <span id="ratio-r-val" class="text-2xl font-black font-mono text-brand-400">0.0%</span>
-            <span id="ratio-r-status" class="text-xs font-semibold px-2 py-0.5 rounded bg-dark-900 text-slate-400 border border-dark-700">Sem dados</span>
-          </div>
-          <p class="text-[10px] text-slate-400 mt-2">Ref. Ideal: 55% - 65%</p>
-        </div>
-
-        <div class="bg-dark-850 p-4 rounded-2xl border border-dark-700/80 shadow-md">
-          <div class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-wider mb-1">Força Relativa Máxima</div>
-          <div class="flex items-baseline gap-2">
-            <span id="rel-force-val" class="text-2xl font-black font-mono text-amber-400">0.00</span>
-            <span class="text-xs text-slate-400 font-mono">kg/kg (Massa Corporal)</span>
-          </div>
-          <p class="text-[10px] text-slate-400 mt-2">Normalizado pelo peso do avaliado</p>
+        <div class="flex flex-wrap gap-1.5 text-xs">
+          <button onclick="filterJoint('all')" id="filter-all" class="px-3 py-1.5 rounded-lg bg-brand-600 text-white font-semibold transition">Todas</button>
+          <button onclick="filterJoint('knee')" id="filter-knee" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Joelho (I:Q)</button>
+          <button onclick="filterJoint('hip')" id="filter-hip" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Quadril (Ad:Ab)</button>
+          <button onclick="filterJoint('ankle')" id="filter-ankle" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Tornozelo (Plantar/Dorsi)</button>
+          <button onclick="filterJoint('shoulder')" id="filter-shoulder" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Ombro (RE:RI)</button>
         </div>
       </div>
 
-      <!-- PARECER TÉCNICO -->
+      <!-- SEÇÃO 1: JOELHO (ISQUIOTIBIAIS VS QUADRÍCEPS) -->
+      <div id="section-knee" class="space-y-4">
+        <div class="flex items-center justify-between border-l-4 border-brand-500 pl-3">
+          <div>
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Complexo do Joelho</h3>
+            <p class="text-xs text-slate-400">Flexores vs. Extensores &bull; Razão Funcional I:Q</p>
+          </div>
+          <span class="text-xs font-mono text-brand-400 font-bold bg-dark-900 border border-dark-700 px-3 py-1 rounded-lg" id="knee-summary-badge">I:Q Médio: 0.0%</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Isquiotibiais -->
+          <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-4 sm:p-5 shadow-xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-500"></div>
+            <div class="flex items-center justify-between mb-4 pl-2">
+              <div>
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider">Flexão de Joelho (Isquiotibiais)</h4>
+                <p class="text-[11px] text-slate-400">Dinamometria isométrica a 30°-45°</p>
+              </div>
+              <span class="text-[10px] font-mono bg-dark-900 text-rose-300 border border-brand-900/60 px-2 py-0.5 rounded">Antagonista</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <!-- E -->
+              <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+                <span class="text-xs font-bold text-slate-300 block mb-1.5">Lado Esquerdo (E)</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <input type="number" id="ham-l1" inputmode="decimal" step="0.5" placeholder="T1" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-brand-500 font-mono">
+                  <input type="number" id="ham-l2" inputmode="decimal" step="0.5" placeholder="T2" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-brand-500 font-mono">
+                  <input type="number" id="ham-l3" inputmode="decimal" step="0.5" placeholder="T3" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-brand-500 font-mono">
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dark-700 flex justify-between text-xs">
+                  <span class="text-slate-400 font-mono">Pico:</span>
+                  <span id="ham-l-peak" class="font-bold text-brand-400 font-mono">0.0 kg</span>
+                </div>
+              </div>
+              <!-- D -->
+              <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+                <span class="text-xs font-bold text-slate-300 block mb-1.5">Lado Direito (D)</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <input type="number" id="ham-r1" inputmode="decimal" step="0.5" placeholder="T1" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-brand-500 font-mono">
+                  <input type="number" id="ham-r2" inputmode="decimal" step="0.5" placeholder="T2" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-brand-500 font-mono">
+                  <input type="number" id="ham-r3" inputmode="decimal" step="0.5" placeholder="T3" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-brand-500 font-mono">
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dark-700 flex justify-between text-xs">
+                  <span class="text-slate-400 font-mono">Pico:</span>
+                  <span id="ham-r-peak" class="font-bold text-brand-400 font-mono">0.0 kg</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 p-2.5 bg-dark-900 rounded-xl border border-dark-700 flex items-center justify-between text-xs">
+              <span class="text-slate-300 font-medium">Assimetria Isquios:</span>
+              <span id="ham-asym-badge" class="font-mono font-bold text-slate-400">0.0% (Equilibrado)</span>
+            </div>
+          </div>
+
+          <!-- Quadríceps -->
+          <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-4 sm:p-5 shadow-xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
+            <div class="flex items-center justify-between mb-4 pl-2">
+              <div>
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider">Extensão de Joelho (Quadríceps)</h4>
+                <p class="text-[11px] text-slate-400">Dinamometria isométrica a 60°-90°</p>
+              </div>
+              <span class="text-[10px] font-mono bg-dark-900 text-amber-400 border border-amber-900/60 px-2 py-0.5 rounded">Agonista</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <!-- E -->
+              <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+                <span class="text-xs font-bold text-slate-300 block mb-1.5">Lado Esquerdo (E)</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <input type="number" id="quad-l1" inputmode="decimal" step="0.5" placeholder="T1" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-amber-500 font-mono">
+                  <input type="number" id="quad-l2" inputmode="decimal" step="0.5" placeholder="T2" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-amber-500 font-mono">
+                  <input type="number" id="quad-l3" inputmode="decimal" step="0.5" placeholder="T3" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-amber-500 font-mono">
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dark-700 flex justify-between text-xs">
+                  <span class="text-slate-400 font-mono">Pico:</span>
+                  <span id="quad-l-peak" class="font-bold text-amber-400 font-mono">0.0 kg</span>
+                </div>
+              </div>
+              <!-- D -->
+              <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+                <span class="text-xs font-bold text-slate-300 block mb-1.5">Lado Direito (D)</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <input type="number" id="quad-r1" inputmode="decimal" step="0.5" placeholder="T1" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-amber-500 font-mono">
+                  <input type="number" id="quad-r2" inputmode="decimal" step="0.5" placeholder="T2" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-amber-500 font-mono">
+                  <input type="number" id="quad-r3" inputmode="decimal" step="0.5" placeholder="T3" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-amber-500 font-mono">
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dark-700 flex justify-between text-xs">
+                  <span class="text-slate-400 font-mono">Pico:</span>
+                  <span id="quad-r-peak" class="font-bold text-amber-400 font-mono">0.0 kg</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 p-2.5 bg-dark-900 rounded-xl border border-dark-700 flex items-center justify-between text-xs">
+              <span class="text-slate-300 font-medium">Assimetria Quadríceps:</span>
+              <span id="quad-asym-badge" class="font-mono font-bold text-slate-400">0.0% (Equilibrado)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 2: QUADRIL (ADUTORES VS ABDUTORES) -->
+      <div id="section-hip" class="space-y-4">
+        <div class="flex items-center justify-between border-l-4 border-indigo-500 pl-3">
+          <div>
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Complexo do Quadril & Pelve</h3>
+            <p class="text-xs text-slate-400">Adutores vs. Abdutores (Glúteo Médio) &bull; Relação Ad:Ab (Prevenção Pubalgia/LCA)</p>
+          </div>
+          <span class="text-xs font-mono text-indigo-400 font-bold bg-dark-900 border border-dark-700 px-3 py-1 rounded-lg" id="hip-summary-badge">Ad:Ab Médio: 0.00</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Adutores -->
+          <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-4 sm:p-5 shadow-xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-1.5 h-full bg-indigo-500"></div>
+            <div class="flex items-center justify-between mb-4 pl-2">
+              <div>
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider">Adução de Quadril (Adutores / Squeeze)</h4>
+                <p class="text-[11px] text-slate-400">Balança de tração / cinta de contenção</p>
+              </div>
+              <span class="text-[10px] font-mono bg-dark-900 text-indigo-300 border border-indigo-900/60 px-2 py-0.5 rounded">Adutores</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+                <span class="text-xs font-bold text-slate-300 block mb-1.5">Lado Esquerdo (E)</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <input type="number" id="add-l1" inputmode="decimal" step="0.5" placeholder="T1" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-indigo-500 font-mono">
+                  <input type="number" id="add-l2" inputmode="decimal" step="0.5" placeholder="T2" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-indigo-500 font-mono">
+                  <input type="number" id="add-l3" inputmode="decimal" step="0.5" placeholder="T3" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-indigo-500 font-mono">
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dark-700 flex justify-between text-xs">
+                  <span class="text-slate-400 font-mono">Pico:</span>
+                  <span id="add-l-peak" class="font-bold text-indigo-400 font-mono">0.0 kg</span>
+                </div>
+              </div>
+              <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+                <span class="text-xs font-bold text-slate-300 block mb-1.5">Lado Direito (D)</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <input type="number" id="add-r1" inputmode="decimal" step="0.5" placeholder="T1" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-indigo-500 font-mono">
+                  <input type="number" id="add-r2" inputmode="decimal" step="0.5" placeholder="T2" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-indigo-500 font-mono">
+                  <input type="number" id="add-r3" inputmode="decimal" step="0.5" placeholder="T3" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-indigo-500 font-mono">
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dark-700 flex justify-between text-xs">
+                  <span class="text-slate-400 font-mono">Pico:</span>
+                  <span id="add-r-peak" class="font-bold text-indigo-400 font-mono">0.0 kg</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 p-2.5 bg-dark-900 rounded-xl border border-dark-700 flex items-center justify-between text-xs">
+              <span class="text-slate-300 font-medium">Assimetria Adutores:</span>
+              <span id="add-asym-badge" class="font-mono font-bold text-slate-400">0.0% (Equilibrado)</span>
+            </div>
+          </div>
+
+          <!-- Abdutores -->
+          <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-4 sm:p-5 shadow-xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-1.5 h-full bg-teal-500"></div>
+            <div class="flex items-center justify-between mb-4 pl-2">
+              <div>
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider">Abdução de Quadril (Glúteo Médio)</h4>
+                <p class="text-[11px] text-slate-400">Decúbito lateral ou ortostático</p>
+              </div>
+              <span class="text-[10px] font-mono bg-dark-900 text-teal-300 border border-teal-900/60 px-2 py-0.5 rounded">Abdutores</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+                <span class="text-xs font-bold text-slate-300 block mb-1.5">Lado Esquerdo (E)</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <input type="number" id="abd-l1" inputmode="decimal" step="0.5" placeholder="T1" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-teal-500 font-mono">
+                  <input type="number" id="abd-l2" inputmode="decimal" step="0.5" placeholder="T2" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-teal-500 font-mono">
+                  <input type="number" id="abd-l3" inputmode="decimal" step="0.5" placeholder="T3" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-teal-500 font-mono">
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dark-700 flex justify-between text-xs">
+                  <span class="text-slate-400 font-mono">Pico:</span>
+                  <span id="abd-l-peak" class="font-bold text-teal-400 font-mono">0.0 kg</span>
+                </div>
+              </div>
+              <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+                <span class="text-xs font-bold text-slate-300 block mb-1.5">Lado Direito (D)</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <input type="number" id="abd-r1" inputmode="decimal" step="0.5" placeholder="T1" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-teal-500 font-mono">
+                  <input type="number" id="abd-r2" inputmode="decimal" step="0.5" placeholder="T2" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-teal-500 font-mono">
+                  <input type="number" id="abd-r3" inputmode="decimal" step="0.5" placeholder="T3" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-teal-500 font-mono">
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dark-700 flex justify-between text-xs">
+                  <span class="text-slate-400 font-mono">Pico:</span>
+                  <span id="abd-r-peak" class="font-bold text-teal-400 font-mono">0.0 kg</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 p-2.5 bg-dark-900 rounded-xl border border-dark-700 flex items-center justify-between text-xs">
+              <span class="text-slate-300 font-medium">Assimetria Abdutores:</span>
+              <span id="abd-asym-badge" class="font-mono font-bold text-slate-400">0.0% (Equilibrado)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 3: TORNOZELO (FLEXÃO PLANTAR VS DORSIFLEXÃO) -->
+      <div id="section-ankle" class="space-y-4">
+        <div class="flex items-center justify-between border-l-4 border-emerald-500 pl-3">
+          <div>
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Complexo do Tornozelo & Panturrilha</h3>
+            <p class="text-xs text-slate-400">Flexão Plantar (Gastrocnêmio/Sóleo) vs. Dorsiflexão (Tibial Anterior)</p>
+          </div>
+          <span class="text-xs font-mono text-emerald-400 font-bold bg-dark-900 border border-dark-700 px-3 py-1 rounded-lg" id="ankle-summary-badge">Propulsão Tornozelo</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Flexão Plantar -->
+          <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-4 sm:p-5 shadow-xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-1.5 h-full bg-emerald-500"></div>
+            <div class="flex items-center justify-between mb-4 pl-2">
+              <div>
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider">Flexão Plantar (Panturrilhas / Aquiles)</h4>
+                <p class="text-[11px] text-slate-400">Tração vertical em apoio unipodal ou sentado</p>
+              </div>
+              <span class="text-[10px] font-mono bg-dark-900 text-emerald-300 border border-emerald-900/60 px-2 py-0.5 rounded">Tríceps Sural</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+                <span class="text-xs font-bold text-slate-300 block mb-1.5">Lado Esquerdo (E)</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <input type="number" id="calf-l1" inputmode="decimal" step="0.5" placeholder="T1" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-emerald-500 font-mono">
+                  <input type="number" id="calf-l2" inputmode="decimal" step="0.5" placeholder="T2" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-emerald-500 font-mono">
+                  <input type="number" id="calf-l3" inputmode="decimal" step="0.5" placeholder="T3" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-emerald-500 font-mono">
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dark-700 flex justify-between text-xs">
+                  <span class="text-slate-400 font-mono">Pico:</span>
+                  <span id="calf-l-peak" class="font-bold text-emerald-400 font-mono">0.0 kg</span>
+                </div>
+              </div>
+              <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+                <span class="text-xs font-bold text-slate-300 block mb-1.5">Lado Direito (D)</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <input type="number" id="calf-r1" inputmode="decimal" step="0.5" placeholder="T1" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-emerald-500 font-mono">
+                  <input type="number" id="calf-r2" inputmode="decimal" step="0.5" placeholder="T2" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-emerald-500 font-mono">
+                  <input type="number" id="calf-r3" inputmode="decimal" step="0.5" placeholder="T3" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-emerald-500 font-mono">
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dark-700 flex justify-between text-xs">
+                  <span class="text-slate-400 font-mono">Pico:</span>
+                  <span id="calf-r-peak" class="font-bold text-emerald-400 font-mono">0.0 kg</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 p-2.5 bg-dark-900 rounded-xl border border-dark-700 flex items-center justify-between text-xs">
+              <span class="text-slate-300 font-medium">Assimetria Panturrilha:</span>
+              <span id="calf-asym-badge" class="font-mono font-bold text-slate-400">0.0% (Equilibrado)</span>
+            </div>
+          </div>
+
+          <!-- Dorsiflexão -->
+          <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-4 sm:p-5 shadow-xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-1.5 h-full bg-cyan-500"></div>
+            <div class="flex items-center justify-between mb-4 pl-2">
+              <div>
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider">Dorsiflexão (Tibial Anterior)</h4>
+                <p class="text-[11px] text-slate-400">Tração isométrica do dorso do pé</p>
+              </div>
+              <span class="text-[10px] font-mono bg-dark-900 text-cyan-300 border border-cyan-900/60 px-2 py-0.5 rounded">Tibial Ant.</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+                <span class="text-xs font-bold text-slate-300 block mb-1.5">Lado Esquerdo (E)</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <input type="number" id="dorsi-l1" inputmode="decimal" step="0.5" placeholder="T1" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-cyan-500 font-mono">
+                  <input type="number" id="dorsi-l2" inputmode="decimal" step="0.5" placeholder="T2" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-cyan-500 font-mono">
+                  <input type="number" id="dorsi-l3" inputmode="decimal" step="0.5" placeholder="T3" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-cyan-500 font-mono">
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dark-700 flex justify-between text-xs">
+                  <span class="text-slate-400 font-mono">Pico:</span>
+                  <span id="dorsi-l-peak" class="font-bold text-cyan-400 font-mono">0.0 kg</span>
+                </div>
+              </div>
+              <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+                <span class="text-xs font-bold text-slate-300 block mb-1.5">Lado Direito (D)</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <input type="number" id="dorsi-r1" inputmode="decimal" step="0.5" placeholder="T1" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-cyan-500 font-mono">
+                  <input type="number" id="dorsi-r2" inputmode="decimal" step="0.5" placeholder="T2" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-cyan-500 font-mono">
+                  <input type="number" id="dorsi-r3" inputmode="decimal" step="0.5" placeholder="T3" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-cyan-500 font-mono">
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dark-700 flex justify-between text-xs">
+                  <span class="text-slate-400 font-mono">Pico:</span>
+                  <span id="dorsi-r-peak" class="font-bold text-cyan-400 font-mono">0.0 kg</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 p-2.5 bg-dark-900 rounded-xl border border-dark-700 flex items-center justify-between text-xs">
+              <span class="text-slate-300 font-medium">Assimetria Dorsiflexão:</span>
+              <span id="dorsi-asym-badge" class="font-mono font-bold text-slate-400">0.0% (Equilibrado)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 4: OMBRO / MANGUITO (ROTAÇÃO EXTERNA VS INTERNA) -->
+      <div id="section-shoulder" class="space-y-4">
+        <div class="flex items-center justify-between border-l-4 border-purple-500 pl-3">
+          <div>
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Complexo do Ombro & Cintura Escapular</h3>
+            <p class="text-xs text-slate-400">Rotação Externa (Manguito) vs. Rotação Interna &bull; Razão RE:RI (Estabilidade)</p>
+          </div>
+          <span class="text-xs font-mono text-purple-400 font-bold bg-dark-900 border border-dark-700 px-3 py-1 rounded-lg" id="shoulder-summary-badge">RE:RI Médio: 0.0%</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Rotação Externa -->
+          <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-4 sm:p-5 shadow-xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-1.5 h-full bg-purple-500"></div>
+            <div class="flex items-center justify-between mb-4 pl-2">
+              <div>
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider">Rotação Externa de Ombro (RE)</h4>
+                <p class="text-[11px] text-slate-400">Infraespinhal / Redondo Menor a 90° de abdução</p>
+              </div>
+              <span class="text-[10px] font-mono bg-dark-900 text-purple-300 border border-purple-900/60 px-2 py-0.5 rounded">Manguito Ext.</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+                <span class="text-xs font-bold text-slate-300 block mb-1.5">Lado Esquerdo (E)</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <input type="number" id="er-l1" inputmode="decimal" step="0.5" placeholder="T1" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-purple-500 font-mono">
+                  <input type="number" id="er-l2" inputmode="decimal" step="0.5" placeholder="T2" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-purple-500 font-mono">
+                  <input type="number" id="er-l3" inputmode="decimal" step="0.5" placeholder="T3" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-purple-500 font-mono">
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dark-700 flex justify-between text-xs">
+                  <span class="text-slate-400 font-mono">Pico:</span>
+                  <span id="er-l-peak" class="font-bold text-purple-400 font-mono">0.0 kg</span>
+                </div>
+              </div>
+              <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+                <span class="text-xs font-bold text-slate-300 block mb-1.5">Lado Direito (D)</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <input type="number" id="er-r1" inputmode="decimal" step="0.5" placeholder="T1" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-purple-500 font-mono">
+                  <input type="number" id="er-r2" inputmode="decimal" step="0.5" placeholder="T2" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-purple-500 font-mono">
+                  <input type="number" id="er-r3" inputmode="decimal" step="0.5" placeholder="T3" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-purple-500 font-mono">
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dark-700 flex justify-between text-xs">
+                  <span class="text-slate-400 font-mono">Pico:</span>
+                  <span id="er-r-peak" class="font-bold text-purple-400 font-mono">0.0 kg</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 p-2.5 bg-dark-900 rounded-xl border border-dark-700 flex items-center justify-between text-xs">
+              <span class="text-slate-300 font-medium">Assimetria Rot. Externa:</span>
+              <span id="er-asym-badge" class="font-mono font-bold text-slate-400">0.0% (Equilibrado)</span>
+            </div>
+          </div>
+
+          <!-- Rotação Interna -->
+          <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-4 sm:p-5 shadow-xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-1.5 h-full bg-pink-500"></div>
+            <div class="flex items-center justify-between mb-4 pl-2">
+              <div>
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider">Rotação Interna de Ombro (RI)</h4>
+                <p class="text-[11px] text-slate-400">Subescapular / Peitoral / Grande Dorsal</p>
+              </div>
+              <span class="text-[10px] font-mono bg-dark-900 text-pink-300 border border-pink-900/60 px-2 py-0.5 rounded">Manguito Int.</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+                <span class="text-xs font-bold text-slate-300 block mb-1.5">Lado Esquerdo (E)</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <input type="number" id="ir-l1" inputmode="decimal" step="0.5" placeholder="T1" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-pink-500 font-mono">
+                  <input type="number" id="ir-l2" inputmode="decimal" step="0.5" placeholder="T2" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-pink-500 font-mono">
+                  <input type="number" id="ir-l3" inputmode="decimal" step="0.5" placeholder="T3" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-pink-500 font-mono">
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dark-700 flex justify-between text-xs">
+                  <span class="text-slate-400 font-mono">Pico:</span>
+                  <span id="ir-l-peak" class="font-bold text-pink-400 font-mono">0.0 kg</span>
+                </div>
+              </div>
+              <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+                <span class="text-xs font-bold text-slate-300 block mb-1.5">Lado Direito (D)</span>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <input type="number" id="ir-r1" inputmode="decimal" step="0.5" placeholder="T1" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-pink-500 font-mono">
+                  <input type="number" id="ir-r2" inputmode="decimal" step="0.5" placeholder="T2" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-pink-500 font-mono">
+                  <input type="number" id="ir-r3" inputmode="decimal" step="0.5" placeholder="T3" oninput="calculateAll()" class="bg-dark-950 border border-dark-700 rounded-lg p-1.5 text-center text-xs font-bold text-white focus:border-pink-500 font-mono">
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dark-700 flex justify-between text-xs">
+                  <span class="text-slate-400 font-mono">Pico:</span>
+                  <span id="ir-r-peak" class="font-bold text-pink-400 font-mono">0.0 kg</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 p-2.5 bg-dark-900 rounded-xl border border-dark-700 flex items-center justify-between text-xs">
+              <span class="text-slate-300 font-medium">Assimetria Rot. Interna:</span>
+              <span id="ir-asym-badge" class="font-mono font-bold text-slate-400">0.0% (Equilibrado)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PARECER TÉCNICO E CONDUTA -->
       <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-5 shadow-xl space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-dark-700 gap-2">
           <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
             <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            Parecer Diagnóstico & Diretrizes Clínicas
+            Parecer Diagnóstico Geral & Diretrizes
           </h3>
           <button onclick="generateAiReport()" id="btn-ai-gen" class="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-750 border border-brand-600/50 text-brand-400 hover:text-brand-300 text-xs font-semibold transition">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
@@ -433,13 +667,13 @@
         </div>
 
         <div id="diagnostic-text" class="text-sm text-slate-300 leading-relaxed bg-dark-900/80 p-4 rounded-xl border border-dark-700/60 font-sans">
-          Preencha os valores de força para gerar a interpretação automática com base no contexto selecionado.
+          Preencha os testes para gerar o diagnóstico e conduta integrados.
         </div>
 
         <div class="flex flex-wrap items-center justify-end gap-3 pt-2">
           <button onclick="saveCurrentAssessment()" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-rose-600 hover:from-brand-500 hover:to-rose-500 text-white font-semibold text-xs tracking-wide uppercase transition shadow-lg shadow-brand-950/50 flex items-center justify-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
-            Salvar no Histórico do Aluno
+            Salvar Avaliação no Histórico
           </button>
         </div>
       </div>
@@ -447,21 +681,20 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- ABA 2: GESTÃO DE ALUNOS                   -->
+    <!-- ABA 2: ALUNOS                              -->
     <!-- ========================================== -->
     <div id="tab-students" class="hidden space-y-6">
-      
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 class="text-base font-bold text-white tracking-wide uppercase">Banco de Alunos & Pacientes</h2>
-          <p class="text-xs text-slate-400">Cadastre seus avaliados e controle suas rotinas com armazenamento local seguro</p>
+          <p class="text-xs text-slate-400">Gerencie perfis e histórico clínico com salvamento local</p>
         </div>
         <div class="flex items-center gap-2">
           <button onclick="openNewStudentModal()" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold shadow-md transition flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
             Novo Aluno
           </button>
-          <button onclick="exportDataBackup()" title="Baixar arquivo de backup" class="px-3 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-dark-700 text-xs font-medium text-slate-300 transition flex items-center gap-1.5">
+          <button onclick="exportDataBackup()" title="Baixar backup" class="px-3 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-dark-700 text-xs font-medium text-slate-300 transition flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
             Backup
           </button>
@@ -474,7 +707,7 @@
       </div>
 
       <div class="bg-dark-850 p-3 rounded-2xl border border-dark-700/80">
-        <input type="text" id="student-search-input" oninput="renderStudentsTable()" placeholder="Buscar aluno por nome ou objetivo..." class="w-full bg-dark-900 border border-dark-600 rounded-xl px-4 py-2.5 text-sm text-white focus:border-brand-500 focus:outline-none transition">
+        <input type="text" id="student-search-input" oninput="renderStudentsTable()" placeholder="Buscar aluno por nome..." class="w-full bg-dark-900 border border-dark-600 rounded-xl px-4 py-2.5 text-sm text-white focus:border-brand-500 focus:outline-none transition">
       </div>
 
       <div class="bg-dark-850 rounded-2xl border border-dark-700/80 overflow-hidden shadow-xl">
@@ -485,8 +718,8 @@
                 <th class="py-3 px-4">Aluno</th>
                 <th class="py-3 px-4">Idade / Sexo</th>
                 <th class="py-3 px-4">Peso</th>
-                <th class="py-3 px-4">Modalidade Principal</th>
-                <th class="py-3 px-4">Avaliações</th>
+                <th class="py-3 px-4">Modalidade</th>
+                <th class="py-3 px-4">Testes</th>
                 <th class="py-3 px-4 text-right">Ações</th>
               </tr>
             </thead>
@@ -494,21 +727,19 @@
           </table>
         </div>
         <div id="no-students-placeholder" class="py-12 text-center text-slate-500 text-xs hidden">
-          Nenhum aluno cadastrado ainda. Clique em "Novo Aluno" para começar.
+          Nenhum aluno cadastrado ainda.
         </div>
       </div>
-
     </div>
 
     <!-- ========================================== -->
-    <!-- ABA 3: EVOLUÇÃO PERIÓDICA                 -->
+    <!-- ABA 3: EVOLUÇÃO                            -->
     <!-- ========================================== -->
     <div id="tab-history" class="hidden space-y-6">
-      
       <div class="bg-dark-850 p-4 sm:p-6 rounded-2xl border border-dark-700/80 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 class="text-base font-bold text-white tracking-wide uppercase">Linha do Tempo & Evolução</h2>
-          <p class="text-xs text-slate-400">Acompanhe a progressão de força e redução de assimetria ao longo do tempo</p>
+          <p class="text-xs text-slate-400">Acompanhamento longitudinal de força e equilíbrio bilateral</p>
         </div>
         <div class="w-full sm:w-72">
           <select id="history-student-select" onchange="renderHistoryCharts(this.value)" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3.5 py-2 text-sm text-white focus:border-brand-500 focus:outline-none transition">
@@ -518,36 +749,32 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
-        <!-- Gráfico de Força -->
         <div class="bg-dark-850 p-4 sm:p-6 rounded-2xl border border-dark-700/80 shadow-xl">
           <h3 class="text-xs font-bold text-white uppercase tracking-wider mb-1 flex items-center justify-between">
             <span>Progressão de Carga Máxima (kgf)</span>
             <span class="text-[10px] text-amber-400 font-mono">Pico Bilateral</span>
           </h3>
-          <p class="text-[11px] text-slate-400 mb-4">Evolução do Quadríceps e Isquiotibiais ao longo dos testes</p>
+          <p class="text-[11px] text-slate-400 mb-4">Evolução de força muscular ao longo das datas</p>
           <div class="h-64 relative">
             <canvas id="chart-force-history"></canvas>
           </div>
         </div>
 
-        <!-- Gráfico de Assimetria -->
         <div class="bg-dark-850 p-4 sm:p-6 rounded-2xl border border-dark-700/80 shadow-xl">
           <h3 class="text-xs font-bold text-white uppercase tracking-wider mb-1 flex items-center justify-between">
-            <span>Assimetria Bilateral & Relação I:Q</span>
-            <span class="text-[10px] text-brand-400 font-mono">Metas de Simetria</span>
+            <span>Assimetria Bilateral (%)</span>
+            <span class="text-[10px] text-brand-400 font-mono">Meta &lt; 10-15%</span>
           </h3>
-          <p class="text-[11px] text-slate-400 mb-4">Aproximação da faixa segura (&lt; 10-15%)</p>
+          <p class="text-[11px] text-slate-400 mb-4">Aproximação da simetria funcional</p>
           <div class="h-64 relative">
             <canvas id="chart-asym-history"></canvas>
           </div>
         </div>
-
       </div>
 
       <div class="bg-dark-850 rounded-2xl border border-dark-700/80 overflow-hidden shadow-xl">
         <div class="p-4 border-b border-dark-700 text-xs font-bold text-white uppercase tracking-wider">
-          Histórico Completo de Testes
+          Histórico Detalhado de Sessões
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs text-slate-300">
@@ -555,10 +782,10 @@
               <tr>
                 <th class="py-2.5 px-4">Data</th>
                 <th class="py-2.5 px-4">Contexto</th>
-                <th class="py-2.5 px-4">Pico Quad (ME/MD)</th>
-                <th class="py-2.5 px-4">Pico Isquio (ME/MD)</th>
-                <th class="py-2.5 px-4">Assimetria Quad</th>
-                <th class="py-2.5 px-4">Razão I:Q</th>
+                <th class="py-2.5 px-4">Quad (E/D)</th>
+                <th class="py-2.5 px-4">Isquios (E/D)</th>
+                <th class="py-2.5 px-4">Adutores (E/D)</th>
+                <th class="py-2.5 px-4">Ombro RE (E/D)</th>
                 <th class="py-2.5 px-4 text-right">Ação</th>
               </tr>
             </thead>
@@ -566,7 +793,6 @@
           </table>
         </div>
       </div>
-
     </div>
 
   </main>
@@ -586,7 +812,6 @@
           <label class="block text-slate-300 font-semibold mb-1">Nome Completo *</label>
           <input type="text" id="modal-student-name" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500">
         </div>
-
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-slate-300 font-semibold mb-1">Idade</label>
@@ -600,7 +825,6 @@
             </select>
           </div>
         </div>
-
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-slate-300 font-semibold mb-1">Massa Corporal (kg)</label>
@@ -611,7 +835,6 @@
             <input type="text" id="modal-student-phone" placeholder="(00) 00000-0000" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500">
           </div>
         </div>
-
         <div>
           <label class="block text-slate-300 font-semibold mb-1">Modalidade Padrão</label>
           <select id="modal-student-modality" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500">
@@ -623,11 +846,6 @@
             <option value="acl">Pós-Op LCA / Reabilitação</option>
           </select>
         </div>
-
-        <div>
-          <label class="block text-slate-300 font-semibold mb-1">Notas Clínicas</label>
-          <textarea id="modal-student-notes" rows="2" placeholder="Ex: Histórico de lesão, desconforto, cirurgias..." class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"></textarea>
-        </div>
       </div>
 
       <div class="pt-3 border-t border-dark-700 flex justify-end gap-2">
@@ -637,7 +855,7 @@
     </div>
   </div>
 
-  <!-- MODAL: API GEMINI -->
+  <!-- MODAL: GOOGLE AI STUDIO -->
   <div id="ai-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-dark-850 border border-dark-700 max-w-md w-full rounded-2xl p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between pb-3 border-b border-dark-700">
@@ -646,11 +864,9 @@
         </h3>
         <button onclick="closeAiModal()" class="text-slate-400 hover:text-white">&times;</button>
       </div>
-
       <p class="text-xs text-slate-300 leading-relaxed">
-        Insira sua chave de API do <strong>Google AI Studio</strong> para habilitar os pareceres automatizados.
+        Insira sua chave de API para habilitar a geração de pareceres e planos automáticos.
       </p>
-
       <div class="space-y-3 text-xs">
         <div>
           <label class="block text-slate-300 font-semibold mb-1">Chave de API (API Key)</label>
@@ -659,12 +875,11 @@
         <div>
           <label class="block text-slate-300 font-semibold mb-1">Modelo Gemini</label>
           <select id="ai-model" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500">
-            <option value="gemini-2.5-flash">Gemini 2.5 Flash (Ultrarrápido)</option>
+            <option value="gemini-2.5-flash">Gemini 2.5 Flash (Rápido & Econômico)</option>
             <option value="gemini-2.5-pro">Gemini 2.5 Pro (Clínico Avançado)</option>
           </select>
         </div>
       </div>
-
       <div class="pt-3 border-t border-dark-700 flex justify-end gap-2">
         <button onclick="closeAiModal()" class="px-4 py-2 rounded-xl bg-dark-800 hover:bg-dark-750 text-slate-300 text-xs font-semibold">Fechar</button>
         <button onclick="saveAiConfig()" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold">Salvar Configuração</button>
@@ -672,34 +887,44 @@
     </div>
   </div>
 
-  <!-- RODAPÉ -->
   <footer class="mt-auto border-t border-dark-700/60 py-4 px-4 text-center text-xs text-slate-500 font-mono no-print">
-    ISOKIN SESSION LAB &bull; Biomecânica Clínica e Avaliação Neuromuscular
+    ISOKIN SESSION LAB &bull; Bateria Neuromuscular Multiarticular
   </footer>
 
-  <!-- SCRIPT -->
+  <!-- JAVASCRIPT -->
   <script>
     document.getElementById('eval-date').value = new Date().toISOString().split('T')[0];
 
     const DB_KEY_STUDENTS = 'isokin_students_db';
     const DB_KEY_ASSESSMENTS = 'isokin_assessments_db';
 
-    function getStudents() {
-      return JSON.parse(localStorage.getItem(DB_KEY_STUDENTS) || '[]');
-    }
+    function getStudents() { return JSON.parse(localStorage.getItem(DB_KEY_STUDENTS) || '[]'); }
+    function saveStudents(s) { localStorage.setItem(DB_KEY_STUDENTS, JSON.stringify(s)); populateStudentSelectors(); renderStudentsTable(); }
+    function getAssessments() { return JSON.parse(localStorage.getItem(DB_KEY_ASSESSMENTS) || '[]'); }
+    function saveAssessments(a) { localStorage.setItem(DB_KEY_ASSESSMENTS, JSON.stringify(a)); }
 
-    function saveStudents(students) {
-      localStorage.setItem(DB_KEY_STUDENTS, JSON.stringify(students));
-      populateStudentSelectors();
-      renderStudentsTable();
-    }
+    // FILTRO VISUAL DE ARTICULAÇÃO
+    function filterJoint(joint) {
+      const sections = ['knee', 'hip', 'ankle', 'shoulder'];
+      const buttons = ['all', 'knee', 'hip', 'ankle', 'shoulder'];
 
-    function getAssessments() {
-      return JSON.parse(localStorage.getItem(DB_KEY_ASSESSMENTS) || '[]');
-    }
+      buttons.forEach(b => {
+        const btn = document.getElementById(`filter-${b}`);
+        if (b === joint) {
+          btn.className = 'px-3 py-1.5 rounded-lg bg-brand-600 text-white font-semibold transition';
+        } else {
+          btn.className = 'px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition';
+        }
+      });
 
-    function saveAssessments(assessments) {
-      localStorage.setItem(DB_KEY_ASSESSMENTS, JSON.stringify(assessments));
+      sections.forEach(s => {
+        const el = document.getElementById(`section-${s}`);
+        if (joint === 'all' || joint === s) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      });
     }
 
     function switchTab(tab) {
@@ -707,27 +932,15 @@
         document.getElementById(`tab-${t}`).classList.add('hidden');
         const bDesktop = document.getElementById(`tab-btn-${t === 'evaluation' ? 'eval' : t}`);
         const bMobile = document.getElementById(`tab-btn-${t === 'evaluation' ? 'eval' : t}-mobile`);
-        if (bDesktop) {
-          bDesktop.classList.remove('bg-brand-600', 'text-white');
-          bDesktop.classList.add('text-slate-400');
-        }
-        if (bMobile) {
-          bMobile.classList.remove('bg-brand-600', 'text-white');
-          bMobile.classList.add('text-slate-400');
-        }
+        if (bDesktop) { bDesktop.classList.remove('bg-brand-600', 'text-white'); bDesktop.classList.add('text-slate-400'); }
+        if (bMobile) { bMobile.classList.remove('bg-brand-600', 'text-white'); bMobile.classList.add('text-slate-400'); }
       });
 
       document.getElementById(`tab-${tab}`).classList.remove('hidden');
       const activeDesktop = document.getElementById(`tab-btn-${tab === 'evaluation' ? 'eval' : tab}`);
       const activeMobile = document.getElementById(`tab-btn-${tab === 'evaluation' ? 'eval' : tab}-mobile`);
-      if (activeDesktop) {
-        activeDesktop.classList.add('bg-brand-600', 'text-white');
-        activeDesktop.classList.remove('text-slate-400');
-      }
-      if (activeMobile) {
-        activeMobile.classList.add('bg-brand-600', 'text-white');
-        activeMobile.classList.remove('text-slate-400');
-      }
+      if (activeDesktop) { activeDesktop.classList.add('bg-brand-600', 'text-white'); activeDesktop.classList.remove('text-slate-400'); }
+      if (activeMobile) { activeMobile.classList.add('bg-brand-600', 'text-white'); activeMobile.classList.remove('text-slate-400'); }
 
       if (tab === 'students') renderStudentsTable();
       if (tab === 'history') {
@@ -738,43 +951,10 @@
     }
 
     function getVal(id) {
-      const v = parseFloat(document.getElementById(id).value);
+      const el = document.getElementById(id);
+      if (!el) return 0;
+      const v = parseFloat(el.value);
       return isNaN(v) ? 0 : v;
-    }
-
-    function calculateAll() {
-      const qL = Math.max(getVal('quad-l1'), getVal('quad-l2'), getVal('quad-l3'));
-      const qR = Math.max(getVal('quad-r1'), getVal('quad-r2'), getVal('quad-r3'));
-      document.getElementById('quad-l-peak').innerText = `${qL.toFixed(1)} kg`;
-      document.getElementById('quad-r-peak').innerText = `${qR.toFixed(1)} kg`;
-
-      const hL = Math.max(getVal('ham-l1'), getVal('ham-l2'), getVal('ham-l3'));
-      const hR = Math.max(getVal('ham-r1'), getVal('ham-r2'), getVal('ham-r3'));
-      document.getElementById('ham-l-peak').innerText = `${hL.toFixed(1)} kg`;
-      document.getElementById('ham-r-peak').innerText = `${hR.toFixed(1)} kg`;
-
-      const context = document.getElementById('eval-context').value;
-      let threshold = 15;
-      if (context === 'acl' || context === 'hamstring_injury') threshold = 10;
-      if (context === 'ewgsop2') threshold = 12;
-
-      const quadAsym = calculateAsymmetry(qL, qR);
-      updateAsymBadge('quad-asym-badge', quadAsym, threshold);
-
-      const hamAsym = calculateAsymmetry(hL, hR);
-      updateAsymBadge('ham-asym-badge', hamAsym, threshold);
-
-      const ratioL = qL > 0 ? (hL / qL) * 100 : 0;
-      const ratioR = qR > 0 ? (hR / qR) * 100 : 0;
-      updateRatioBadge('ratio-l-val', 'ratio-l-status', ratioL);
-      updateRatioBadge('ratio-r-val', 'ratio-r-status', ratioR);
-
-      const weight = getVal('eval-weight');
-      const maxPeak = Math.max(qL, qR, hL, hR);
-      const relForce = weight > 0 ? (maxPeak / weight) : 0;
-      document.getElementById('rel-force-val').innerText = `${relForce.toFixed(2)}`;
-
-      generateClinicalSummary(qL, qR, hL, hR, quadAsym, hamAsym, ratioL, ratioR, threshold);
     }
 
     function calculateAsymmetry(left, right) {
@@ -786,83 +966,139 @@
       return { diff, favored };
     }
 
-    function updateAsymBadge(elementId, asymObj, threshold) {
-      const el = document.getElementById(elementId);
+    function updateBadge(badgeId, asymObj, threshold) {
+      const el = document.getElementById(badgeId);
+      if (!el) return;
       const val = asymObj.diff.toFixed(1);
       if (asymObj.diff === 0) {
-        el.className = 'px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-dark-800 text-slate-400';
+        el.className = 'font-mono font-bold text-slate-400';
         el.innerText = '0.0% (Equilibrado)';
         return;
       }
       if (asymObj.diff <= threshold) {
-        el.className = 'px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-800';
+        el.className = 'font-mono font-bold text-emerald-400';
         el.innerText = `${val}% (${asymObj.favored} > - Simétrico)`;
       } else {
-        el.className = 'px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-brand-950 text-rose-300 border border-brand-800 animate-pulse';
-        el.innerText = `${val}% (${asymObj.favored} > - Alto Risco)`;
+        el.className = 'font-mono font-bold text-rose-400 animate-pulse';
+        el.innerText = `${val}% (${asymObj.favored} > - Défice)`;
       }
     }
 
-    function updateRatioBadge(valId, statusId, ratioPercent) {
-      document.getElementById(valId).innerText = `${ratioPercent.toFixed(1)}%`;
-      const st = document.getElementById(statusId);
-      if (ratioPercent === 0) {
-        st.innerText = 'Sem dados';
-        st.className = 'text-xs font-semibold px-2 py-0.5 rounded bg-dark-900 text-slate-400 border border-dark-700';
-      } else if (ratioPercent < 55) {
-        st.innerText = 'Défice Isquios';
-        st.className = 'text-xs font-semibold px-2 py-0.5 rounded bg-brand-950 text-rose-300 border border-brand-800';
-      } else if (ratioPercent >= 55 && ratioPercent <= 65) {
-        st.innerText = 'Ótimo (Ref)';
-        st.className = 'text-xs font-semibold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800';
+    function calculateAll() {
+      // 1. JOELHO
+      const hL = Math.max(getVal('ham-l1'), getVal('ham-l2'), getVal('ham-l3'));
+      const hR = Math.max(getVal('ham-r1'), getVal('ham-r2'), getVal('ham-r3'));
+      document.getElementById('ham-l-peak').innerText = `${hL.toFixed(1)} kg`;
+      document.getElementById('ham-r-peak').innerText = `${hR.toFixed(1)} kg`;
+
+      const qL = Math.max(getVal('quad-l1'), getVal('quad-l2'), getVal('quad-l3'));
+      const qR = Math.max(getVal('quad-r1'), getVal('quad-r2'), getVal('quad-r3'));
+      document.getElementById('quad-l-peak').innerText = `${qL.toFixed(1)} kg`;
+      document.getElementById('quad-r-peak').innerText = `${qR.toFixed(1)} kg`;
+
+      // 2. QUADRIL
+      const addL = Math.max(getVal('add-l1'), getVal('add-l2'), getVal('add-l3'));
+      const addR = Math.max(getVal('add-r1'), getVal('add-r2'), getVal('add-r3'));
+      document.getElementById('add-l-peak').innerText = `${addL.toFixed(1)} kg`;
+      document.getElementById('add-r-peak').innerText = `${addR.toFixed(1)} kg`;
+
+      const abdL = Math.max(getVal('abd-l1'), getVal('abd-l2'), getVal('abd-l3'));
+      const abdR = Math.max(getVal('abd-r1'), getVal('abd-r2'), getVal('abd-r3'));
+      document.getElementById('abd-l-peak').innerText = `${abdL.toFixed(1)} kg`;
+      document.getElementById('abd-r-peak').innerText = `${abdR.toFixed(1)} kg`;
+
+      // 3. TORNOZELO
+      const calfL = Math.max(getVal('calf-l1'), getVal('calf-l2'), getVal('calf-l3'));
+      const calfR = Math.max(getVal('calf-r1'), getVal('calf-r2'), getVal('calf-r3'));
+      document.getElementById('calf-l-peak').innerText = `${calfL.toFixed(1)} kg`;
+      document.getElementById('calf-r-peak').innerText = `${calfR.toFixed(1)} kg`;
+
+      const dorsiL = Math.max(getVal('dorsi-l1'), getVal('dorsi-l2'), getVal('dorsi-l3'));
+      const dorsiR = Math.max(getVal('dorsi-r1'), getVal('dorsi-r2'), getVal('dorsi-r3'));
+      document.getElementById('dorsi-l-peak').innerText = `${dorsiL.toFixed(1)} kg`;
+      document.getElementById('dorsi-r-peak').innerText = `${dorsiR.toFixed(1)} kg`;
+
+      // 4. OMBRO
+      const erL = Math.max(getVal('er-l1'), getVal('er-l2'), getVal('er-l3'));
+      const erR = Math.max(getVal('er-r1'), getVal('er-r2'), getVal('er-r3'));
+      document.getElementById('er-l-peak').innerText = `${erL.toFixed(1)} kg`;
+      document.getElementById('er-r-peak').innerText = `${erR.toFixed(1)} kg`;
+
+      const irL = Math.max(getVal('ir-l1'), getVal('ir-l2'), getVal('ir-l3'));
+      const irR = Math.max(getVal('ir-r1'), getVal('ir-r2'), getVal('ir-r3'));
+      document.getElementById('ir-l-peak').innerText = `${irL.toFixed(1)} kg`;
+      document.getElementById('ir-r-peak').innerText = `${irR.toFixed(1)} kg`;
+
+      // LIMITES DE TOLERÂNCIA
+      const context = document.getElementById('eval-context').value;
+      let threshold = 15;
+      if (context === 'acl' || context === 'hamstring_injury') threshold = 10;
+      if (context === 'ewgsop2') threshold = 12;
+
+      // ATUALIZAÇÃO DOS BADGES DE ASSIMETRIA
+      updateBadge('ham-asym-badge', calculateAsymmetry(hL, hR), threshold);
+      updateBadge('quad-asym-badge', calculateAsymmetry(qL, qR), threshold);
+      updateBadge('add-asym-badge', calculateAsymmetry(addL, addR), threshold);
+      updateBadge('abd-asym-badge', calculateAsymmetry(abdL, abdR), threshold);
+      updateBadge('calf-asym-badge', calculateAsymmetry(calfL, calfR), threshold);
+      updateBadge('dorsi-asym-badge', calculateAsymmetry(dorsiL, dorsiR), threshold);
+      updateBadge('er-asym-badge', calculateAsymmetry(erL, erR), threshold);
+      updateBadge('ir-asym-badge', calculateAsymmetry(irL, irR), threshold);
+
+      // RAZÕES FUNCIONAIS
+      // Razão I:Q Joelho
+      const ratioQL = qL > 0 ? (hL / qL) * 100 : 0;
+      const ratioQR = qR > 0 ? (hR / qR) * 100 : 0;
+      const ratioQMean = (ratioQL > 0 && ratioQR > 0) ? (ratioQL + ratioQR) / 2 : (ratioQL || ratioQR);
+      document.getElementById('knee-summary-badge').innerText = `I:Q Médio: ${ratioQMean.toFixed(1)}%`;
+
+      // Razão Ad:Ab Quadril
+      const ratioHipL = abdL > 0 ? (addL / abdL) : 0;
+      const ratioHipR = abdR > 0 ? (addR / abdR) : 0;
+      const ratioHipMean = (ratioHipL > 0 && ratioHipR > 0) ? (ratioHipL + ratioHipR) / 2 : (ratioHipL || ratioHipR);
+      document.getElementById('hip-summary-badge').innerText = `Ad:Ab Médio: ${ratioHipMean.toFixed(2)}`;
+
+      // Razão RE:RI Ombro
+      const ratioShL = irL > 0 ? (erL / irL) * 100 : 0;
+      const ratioShR = irR > 0 ? (erR / irR) * 100 : 0;
+      const ratioShMean = (ratioShL > 0 && ratioShR > 0) ? (ratioShL + ratioShR) / 2 : (ratioShL || ratioShR);
+      document.getElementById('shoulder-summary-badge').innerText = `RE:RI Médio: ${ratioShMean.toFixed(1)}%`;
+
+      // RESUMO CLÍNICO AUTOMÁTICO
+      generateMultiSummary(hL, hR, qL, qR, addL, addR, abdL, abdR, erL, erR, irL, irR, threshold);
+    }
+
+    function generateMultiSummary(hL, hR, qL, qR, addL, addR, abdL, abdR, erL, erR, irL, irR, threshold) {
+      let alerts = [];
+
+      const qAsym = calculateAsymmetry(qL, qR);
+      const hAsym = calculateAsymmetry(hL, hR);
+      const addAsym = calculateAsymmetry(addL, addR);
+      const erAsym = calculateAsymmetry(erL, erR);
+
+      if (qAsym.diff > threshold) alerts.push(`• <strong>Quadríceps:</strong> Défice bilateral de ${qAsym.diff.toFixed(1)}% (${qAsym.favored} mais forte).`);
+      if (hAsym.diff > threshold) alerts.push(`• <strong>Isquiotibiais:</strong> Assimetria de ${hAsym.diff.toFixed(1)}% (${hAsym.favored} mais forte). Alerta para estiramento.`);
+      if (addAsym.diff > threshold) alerts.push(`• <strong>Adutores (Quadril):</strong> Desequilíbrio de ${addAsym.diff.toFixed(1)}% (${addAsym.favored} >). Atenção para sobrecarga púbica.`);
+      if (erAsym.diff > threshold) alerts.push(`• <strong>Manguito Rotador:</strong> Assimetria de RE de ${erAsym.diff.toFixed(1)}%. Risco de instabilidade glenoumeral.`);
+
+      if (alerts.length === 0) {
+        document.getElementById('diagnostic-text').innerHTML = `
+          <p class="text-emerald-400 font-medium">✓ Bateria dentro dos limiares de segurança estipulados (Tolerância máxima: ${threshold}%).</p>
+        `;
       } else {
-        st.innerText = 'Predomínio Post';
-        st.className = 'text-xs font-semibold px-2 py-0.5 rounded bg-dark-800 text-amber-300 border border-amber-900/40';
-      }
-    }
-
-    function generateClinicalSummary(qL, qR, hL, hR, qAsym, hAsym, rL, rR, threshold) {
-      if (qL === 0 && qR === 0) {
-        document.getElementById('diagnostic-text').innerHTML = 'Preencha os valores de força para gerar a interpretação automática.';
-        return;
-      }
-
-      const modalityName = document.getElementById('eval-modality').selectedOptions[0].text;
-      const contextName = document.getElementById('eval-context').selectedOptions[0].text;
-
-      let condutas = [];
-      if (qAsym.diff > threshold) {
-        condutas.push(`• <strong>Défice de Quadríceps (${qAsym.diff.toFixed(1)}% - Membro ${qAsym.favored} mais forte):</strong> Priorizar estímulos unilaterais focados no membro deficitário.`);
-      }
-      if (hAsym.diff > threshold) {
-        condutas.push(`• <strong>Défice de Isquiotibiais (${hAsym.diff.toFixed(1)}% - Membro ${hAsym.favored} mais forte):</strong> Inserir reforço isolado na cadeia posterior (flexão nórdica isométrica, mesa flexora unilateral).`);
-      }
-      if (rL > 0 && rL < 55) {
-        condutas.push(`• <strong>Razão I:Q Lado Esquerdo Baixa (${rL.toFixed(1)}%):</strong> Risco aumentado para sobrecarga anterior do joelho.`);
-      }
-      if (rR > 0 && rR < 55) {
-        condutas.push(`• <strong>Razão I:Q Lado Direito Baixa (${rR.toFixed(1)}%):</strong> Vulnerabilidade na desaceleração excêntrica.`);
-      }
-
-      if (condutas.length === 0) {
-        condutas.push(`• <strong>Simetria Preservada:</strong> Força bilateral e relações agonista/antagonista dentro das faixas recomendadas para <em>${contextName}</em>.`);
-      }
-
-      document.getElementById('diagnostic-text').innerHTML = `
-        <div class="space-y-2">
-          <p><strong>Contexto:</strong> ${modalityName} | <strong>Diretriz:</strong> ${contextName} (Limite tolerado: ${threshold}%).</p>
-          <div class="space-y-1 mt-2 text-slate-200">
-            ${condutas.join('<br>')}
+        document.getElementById('diagnostic-text').innerHTML = `
+          <div class="space-y-1.5">
+            <span class="text-rose-400 font-bold block mb-1">Pontos de Atenção & Desequilíbrios Identificados:</span>
+            ${alerts.join('<br>')}
           </div>
-        </div>
-      `;
+        `;
+      }
     }
 
     function populateStudentSelectors() {
       const students = getStudents();
       const s1 = document.getElementById('quick-student-select');
       const s2 = document.getElementById('history-student-select');
-
       const cur1 = s1.value;
       const cur2 = s2.value;
 
@@ -885,7 +1121,7 @@
       const tbody = document.getElementById('students-table-body');
       const placeholder = document.getElementById('no-students-placeholder');
 
-      const filtered = students.filter(s => s.name.toLowerCase().includes(term) || (s.notes && s.notes.toLowerCase().includes(term)));
+      const filtered = students.filter(s => s.name.toLowerCase().includes(term));
 
       if (filtered.length === 0) {
         tbody.innerHTML = '';
@@ -919,7 +1155,6 @@
       document.getElementById('modal-student-age').value = '';
       document.getElementById('modal-student-weight').value = '';
       document.getElementById('modal-student-phone').value = '';
-      document.getElementById('modal-student-notes').value = '';
       document.getElementById('student-modal-title').innerText = 'Cadastrar Novo Aluno';
       document.getElementById('student-modal').classList.remove('hidden');
     }
@@ -930,10 +1165,7 @@
 
     function saveStudentFromModal() {
       const name = document.getElementById('modal-student-name').value.trim();
-      if (!name) {
-        alert('Por favor, informe o nome do aluno.');
-        return;
-      }
+      if (!name) { alert('Informe o nome do aluno.'); return; }
 
       const id = document.getElementById('modal-student-id').value || 'st_' + Date.now();
       const student = {
@@ -944,39 +1176,33 @@
         weight: document.getElementById('modal-student-weight').value,
         phone: document.getElementById('modal-student-phone').value,
         modality: document.getElementById('modal-student-modality').value,
-        notes: document.getElementById('modal-student-notes').value,
       };
 
       let students = getStudents();
-      const existingIdx = students.findIndex(s => s.id === id);
-      if (existingIdx >= 0) {
-        students[existingIdx] = student;
-      } else {
-        students.push(student);
-      }
+      const idx = students.findIndex(s => s.id === id);
+      if (idx >= 0) students[idx] = student;
+      else students.push(student);
 
       saveStudents(students);
       closeStudentModal();
     }
 
     function deleteStudent(id) {
-      if (!confirm('Deseja realmente remover este aluno e todo o histórico?')) return;
-      let students = getStudents().filter(s => s.id !== id);
-      let assessments = getAssessments().filter(a => a.studentId !== id);
-      saveStudents(students);
-      saveAssessments(assessments);
+      if (!confirm('Remover aluno e histórico?')) return;
+      saveStudents(getStudents().filter(s => s.id !== id));
+      saveAssessments(getAssessments().filter(a => a.studentId !== id));
     }
 
     function loadStudentToEval(id) {
       if (!id) return;
-      const student = getStudents().find(s => s.id === id);
-      if (!student) return;
+      const s = getStudents().find(x => x.id === id);
+      if (!s) return;
 
-      document.getElementById('eval-name').value = student.name;
-      document.getElementById('eval-age').value = student.age || '';
-      document.getElementById('eval-gender').value = student.gender || 'M';
-      document.getElementById('eval-weight').value = student.weight || '';
-      if (student.modality) document.getElementById('eval-modality').value = student.modality;
+      document.getElementById('eval-name').value = s.name;
+      document.getElementById('eval-age').value = s.age || '';
+      document.getElementById('eval-gender').value = s.gender || 'M';
+      document.getElementById('eval-weight').value = s.weight || '';
+      if (s.modality) document.getElementById('eval-modality').value = s.modality;
       document.getElementById('quick-student-select').value = id;
 
       switchTab('evaluation');
@@ -991,10 +1217,7 @@
 
     function saveCurrentAssessment() {
       const name = document.getElementById('eval-name').value.trim();
-      if (!name) {
-        alert('Preencha o nome do aluno antes de salvar.');
-        return;
-      }
+      if (!name) { alert('Informe o nome do aluno antes de salvar.'); return; }
 
       let students = getStudents();
       let student = students.find(s => s.name.toLowerCase() === name.toLowerCase());
@@ -1005,17 +1228,11 @@
           age: document.getElementById('eval-age').value,
           gender: document.getElementById('eval-gender').value,
           weight: document.getElementById('eval-weight').value,
-          modality: document.getElementById('eval-modality').value,
-          notes: ''
+          modality: document.getElementById('eval-modality').value
         };
         students.push(student);
         saveStudents(students);
       }
-
-      const qL = Math.max(getVal('quad-l1'), getVal('quad-l2'), getVal('quad-l3'));
-      const qR = Math.max(getVal('quad-r1'), getVal('quad-r2'), getVal('quad-r3'));
-      const hL = Math.max(getVal('ham-l1'), getVal('ham-l2'), getVal('ham-l3'));
-      const hR = Math.max(getVal('ham-r1'), getVal('ham-r2'), getVal('ham-r3'));
 
       const assessment = {
         id: 'eval_' + Date.now(),
@@ -1024,9 +1241,10 @@
         weight: getVal('eval-weight'),
         modality: document.getElementById('eval-modality').value,
         context: document.getElementById('eval-context').value,
-        quad: { l: qL, r: qR, asym: calculateAsymmetry(qL, qR).diff },
-        ham: { l: hL, r: hR, asym: calculateAsymmetry(hL, hR).diff },
-        ratio: { l: qL > 0 ? (hL / qL) * 100 : 0, r: qR > 0 ? (hR / qR) * 100 : 0 },
+        quad: { l: Math.max(getVal('quad-l1'), getVal('quad-l2'), getVal('quad-l3')), r: Math.max(getVal('quad-r1'), getVal('quad-r2'), getVal('quad-r3')) },
+        ham: { l: Math.max(getVal('ham-l1'), getVal('ham-l2'), getVal('ham-l3')), r: Math.max(getVal('ham-r1'), getVal('ham-r2'), getVal('ham-r3')) },
+        add: { l: Math.max(getVal('add-l1'), getVal('add-l2'), getVal('add-l3')), r: Math.max(getVal('add-r1'), getVal('add-r2'), getVal('add-r3')) },
+        er: { l: Math.max(getVal('er-l1'), getVal('er-l2'), getVal('er-l3')), r: Math.max(getVal('er-r1'), getVal('er-r2'), getVal('er-r3')) },
         diagnostic: document.getElementById('diagnostic-text').innerText
       };
 
@@ -1050,8 +1268,7 @@
       const labels = assessments.map(a => a.date);
       const quadPeaks = assessments.map(a => Math.max(a.quad.l, a.quad.r));
       const hamPeaks = assessments.map(a => Math.max(a.ham.l, a.ham.r));
-      const quadAsyms = assessments.map(a => a.quad.asym);
-      const hamAsyms = assessments.map(a => a.ham.asym);
+      const addPeaks = assessments.map(a => Math.max(a.add.l, a.add.r));
 
       const tbody = document.getElementById('history-table-body');
       tbody.innerHTML = assessments.map(a => `
@@ -1060,8 +1277,8 @@
           <td class="py-2 px-4 uppercase text-slate-400">${a.modality}</td>
           <td class="py-2 px-4">${a.quad.l.toFixed(1)} / ${a.quad.r.toFixed(1)} kg</td>
           <td class="py-2 px-4">${a.ham.l.toFixed(1)} / ${a.ham.r.toFixed(1)} kg</td>
-          <td class="py-2 px-4 font-bold ${a.quad.asym > 15 ? 'text-brand-400' : 'text-emerald-400'}">${a.quad.asym.toFixed(1)}%</td>
-          <td class="py-2 px-4">${a.ratio.l.toFixed(1)}% / ${a.ratio.r.toFixed(1)}%</td>
+          <td class="py-2 px-4">${a.add.l.toFixed(1)} / ${a.add.r.toFixed(1)} kg</td>
+          <td class="py-2 px-4">${a.er.l.toFixed(1)} / ${a.er.r.toFixed(1)} kg</td>
           <td class="py-2 px-4 text-right">
             <button onclick="deleteAssessment('${a.id}', '${studentId}')" class="text-slate-500 hover:text-brand-400">&times;</button>
           </td>
@@ -1075,22 +1292,9 @@
         data: {
           labels,
           datasets: [
-            {
-              label: 'Pico Quadríceps (kg)',
-              data: quadPeaks,
-              borderColor: '#f59e0b',
-              backgroundColor: 'rgba(245, 158, 11, 0.15)',
-              tension: 0.3,
-              fill: true
-            },
-            {
-              label: 'Pico Isquiotibiais (kg)',
-              data: hamPeaks,
-              borderColor: '#f43f5e',
-              backgroundColor: 'rgba(244, 63, 94, 0.15)',
-              tension: 0.3,
-              fill: true
-            }
+            { label: 'Quadríceps (kg)', data: quadPeaks, borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', tension: 0.3, fill: true },
+            { label: 'Isquiotibiais (kg)', data: hamPeaks, borderColor: '#f43f5e', backgroundColor: 'rgba(244, 63, 94, 0.1)', tension: 0.3, fill: true },
+            { label: 'Adutores (kg)', data: addPeaks, borderColor: '#6366f1', backgroundColor: 'rgba(99, 102, 241, 0.1)', tension: 0.3, fill: true }
           ]
         },
         options: {
@@ -1100,9 +1304,7 @@
             x: { grid: { color: '#23141d' }, ticks: { color: '#fda4af' } },
             y: { grid: { color: '#23141d' }, ticks: { color: '#fda4af' } }
           },
-          plugins: {
-            legend: { labels: { color: '#fecdd3' } }
-          }
+          plugins: { legend: { labels: { color: '#fecdd3' } } }
         }
       });
 
@@ -1113,16 +1315,9 @@
         data: {
           labels,
           datasets: [
-            {
-              label: 'Assimetria Quadríceps (%)',
-              data: quadAsyms,
-              backgroundColor: '#f59e0b'
-            },
-            {
-              label: 'Assimetria Isquiotibiais (%)',
-              data: hamAsyms,
-              backgroundColor: '#e11d48'
-            }
+            { label: 'Assimetria Quad (%)', data: assessments.map(a => calculateAsymmetry(a.quad.l, a.quad.r).diff), backgroundColor: '#f59e0b' },
+            { label: 'Assimetria Isquios (%)', data: assessments.map(a => calculateAsymmetry(a.ham.l, a.ham.r).diff), backgroundColor: '#e11d48' },
+            { label: 'Assimetria Adutores (%)', data: assessments.map(a => calculateAsymmetry(a.add.l, a.add.r).diff), backgroundColor: '#6366f1' }
           ]
         },
         options: {
@@ -1132,30 +1327,22 @@
             x: { grid: { color: '#23141d' }, ticks: { color: '#fda4af' } },
             y: { grid: { color: '#23141d' }, ticks: { color: '#fda4af' }, max: 30 }
           },
-          plugins: {
-            legend: { labels: { color: '#fecdd3' } }
-          }
+          plugins: { legend: { labels: { color: '#fecdd3' } } }
         }
       });
     }
 
     function deleteAssessment(evalId, studentId) {
       if (!confirm('Remover esta avaliação do histórico?')) return;
-      let assessments = getAssessments().filter(a => a.id !== evalId);
-      saveAssessments(assessments);
+      saveAssessments(getAssessments().filter(a => a.id !== evalId));
       renderHistoryCharts(studentId);
     }
 
     function exportDataBackup() {
-      const data = {
-        students: getStudents(),
-        assessments: getAssessments(),
-        exportDate: new Date().toISOString()
-      };
+      const data = { students: getStudents(), assessments: getAssessments(), exportDate: new Date().toISOString() };
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
+      a.href = URL.createObjectURL(blob);
       a.download = `isokin_backup_${new Date().toISOString().split('T')[0]}.json`;
       a.click();
     }
@@ -1170,14 +1357,10 @@
           if (imported.students && imported.assessments) {
             saveStudents(imported.students);
             saveAssessments(imported.assessments);
-            alert('Banco de dados restaurado com sucesso!');
+            alert('Banco restaurado!');
             location.reload();
-          } else {
-            alert('Arquivo de backup inválido.');
           }
-        } catch (err) {
-          alert('Erro ao ler arquivo JSON.');
-        }
+        } catch (err) { alert('Erro no arquivo.'); }
       };
       reader.readAsText(file);
     }
@@ -1193,11 +1376,9 @@
     }
 
     function saveAiConfig() {
-      const key = document.getElementById('ai-api-key').value.trim();
-      const model = document.getElementById('ai-model').value;
-      localStorage.setItem('isokin_gemini_key', key);
-      localStorage.setItem('isokin_gemini_model', model);
-      alert('Configurações da API salvas com sucesso!');
+      localStorage.setItem('isokin_gemini_key', document.getElementById('ai-api-key').value.trim());
+      localStorage.setItem('isokin_gemini_model', document.getElementById('ai-model').value);
+      alert('Chave salva com sucesso!');
       closeAiModal();
     }
 
@@ -1206,7 +1387,7 @@
       const model = localStorage.getItem('isokin_gemini_model') || 'gemini-2.5-flash';
 
       if (!apiKey) {
-        alert('Configure sua chave no botão "AI Studio API" no topo antes de gerar.');
+        alert('Configure sua chave de API no botão "AI Studio API" no topo antes de gerar.');
         openAiModal();
         return;
       }
@@ -1220,47 +1401,48 @@
         massaCorporal: document.getElementById('eval-weight').value || 'Não informado',
         modalidade: document.getElementById('eval-modality').value,
         contextoClinico: document.getElementById('eval-context').value,
-        quadriceps: {
-          esquerdoPico: document.getElementById('quad-l-peak').innerText,
-          direitoPico: document.getElementById('quad-r-peak').innerText,
-          assimetria: document.getElementById('quad-asym-badge').innerText
+        joelho: {
+          isquiosE: document.getElementById('ham-l-peak').innerText,
+          isquiosD: document.getElementById('ham-r-peak').innerText,
+          quadE: document.getElementById('quad-l-peak').innerText,
+          quadD: document.getElementById('quad-r-peak').innerText
         },
-        isquiotibiais: {
-          esquerdoPico: document.getElementById('ham-l-peak').innerText,
-          direitoPico: document.getElementById('ham-r-peak').innerText,
-          assimetria: document.getElementById('ham-asym-badge').innerText
+        quadril: {
+          adutoresE: document.getElementById('add-l-peak').innerText,
+          adutoresD: document.getElementById('add-r-peak').innerText,
+          abdutoresE: document.getElementById('abd-l-peak').innerText,
+          abdutoresD: document.getElementById('abd-r-peak').innerText
         },
-        razaoIQ: {
-          esquerda: document.getElementById('ratio-l-val').innerText,
-          direita: document.getElementById('ratio-r-val').innerText
+        ombro: {
+          reE: document.getElementById('er-l-peak').innerText,
+          reD: document.getElementById('er-r-peak').innerText,
+          riE: document.getElementById('ir-l-peak').innerText,
+          riD: document.getElementById('ir-r-peak').innerText
         }
       };
 
-      const promptText = `Você é um biomecânico e fisiologista do exercício sênior especializado em avaliação neuromuscular isométrica com dinamometria/balança de tração. Analise os dados a seguir e elabore um parecer técnico descritivo, direto e fundamentado (citando ACSM, Croisier ou critérios de reabilitação relevantes). Indique pontos de atenção, riscos biomecânicos e 2 a 3 exercícios específicos de intervenção corretiva com dosagem sugerida.\n\nDados da Avaliação:\n${JSON.stringify(payload, null, 2)}`;
+      const promptText = `Você é um especialista sênior em biomecânica e avaliação neuromuscular com balança de tração isométrica. Analise os dados da bateria neuromuscular abaixo e elabore um parecer clínico direto, fundamentado na literatura (ACSM, Croisier, Grindem) e prescreva 2 a 3 intervenções práticas com dosagens para corrigir os maiores défices encontrados:\n\n${JSON.stringify(payload, null, 2)}`;
 
       try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: promptText }] }]
-          })
+          body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
         });
 
         const data = await response.json();
         if (data.candidates && data.candidates[0].content.parts[0].text) {
-          const aiResponse = data.candidates[0].content.parts[0].text;
           document.getElementById('diagnostic-text').innerHTML = `
             <div class="border-l-4 border-brand-500 pl-3 py-1 bg-dark-900 rounded">
               <span class="text-xs font-mono font-bold text-brand-400 uppercase tracking-wide block mb-1">Parecer Gerado via Gemini (${model}):</span>
-              <div class="text-slate-200 whitespace-pre-line text-xs sm:text-sm leading-relaxed">${aiResponse}</div>
+              <div class="text-slate-200 whitespace-pre-line text-xs sm:text-sm leading-relaxed">${data.candidates[0].content.parts[0].text}</div>
             </div>
           `;
         } else {
-          alert('Erro na resposta da API Gemini. Verifique a chave inserida.');
+          alert('Erro na resposta da API Gemini. Verifique sua chave.');
         }
       } catch (err) {
-        alert('Falha na comunicação com o Google AI Studio: ' + err.message);
+        alert('Falha na comunicação com a IA: ' + err.message);
       } finally {
         btn.innerText = 'Gerar Parecer via Google AI Studio';
         btn.disabled = false;
