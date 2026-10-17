@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ISOKIN FORCE LAB - Avaliação Neuromuscular</title>
+  <title>ISOKIN FORCE LAB - Bateria Neuromuscular</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -24,21 +24,23 @@
             mono: ['JetBrains Mono', 'monospace'],
           },
           colors: {
-            crimson: {
-              400: '#f87171',
-              500: '#ef4444',
-              600: '#dc2626',
-              700: '#b91c1c',
-              800: '#991b1b',
-              900: '#7f1d1d',
-              950: '#450a0a',
+            brand: {
+              400: '#fb7185',
+              500: '#f43f5e',
+              600: '#e11d48',
+              700: '#be123c',
+              800: '#9f1239',
+              900: '#881337',
+              950: '#4c0519',
             },
-            surface: {
-              900: '#0d1117',
-              850: '#131923',
-              800: '#161e2e',
-              700: '#232e42',
-              600: '#324158'
+            dark: {
+              950: '#0a0608',
+              900: '#0f0a0d',
+              850: '#140c10',
+              800: '#1a1015',
+              750: '#23141d',
+              700: '#321927',
+              600: '#4a2338'
             }
           }
         }
@@ -61,7 +63,7 @@
     
     /* Touch targets confortáveis para Mobile */
     input[type="number"], select, button {
-      min-height: 44px;
+      min-height: 42px;
     }
     input[type=number]::-webkit-inner-spin-button, 
     input[type=number]::-webkit-outer-spin-button { 
@@ -74,38 +76,41 @@
   </style>
 </head>
 
-<body class="bg-surface-900 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-crimson-600 selection:text-white">
+<body class="bg-dark-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-brand-600 selection:text-white">
 
-  <!-- TOPO / CABEÇALHO RESPONSIVO -->
-  <header class="bg-surface-850/90 border-b border-surface-700/60 sticky top-0 z-30 backdrop-blur-md px-4 lg:px-8 py-3 transition-all no-print">
+  <!-- CABEÇALHO -->
+  <header class="bg-dark-900/95 border-b border-dark-700/80 sticky top-0 z-30 backdrop-blur-md px-4 lg:px-8 py-3 transition-all no-print">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
       
       <div class="flex items-center justify-between w-full sm:w-auto">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-crimson-700 to-crimson-500 flex items-center justify-center shadow-lg shadow-crimson-900/40 border border-crimson-400/30">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          <!-- Ícone original ISOKIN da referência -->
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 via-brand-600 to-amber-500 flex items-center justify-center shadow-lg shadow-brand-950/60 border border-brand-500/40 p-1.5">
+            <svg class="w-full h-full text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2C8.5 2 6 4.5 6 7.5c0 4 6 5 6 9 0 3-2.5 5.5-6 5.5"/>
+              <circle cx="12" cy="7.5" r="1.5" fill="currentColor"/>
+              <circle cx="6" cy="22" r="1.5" fill="currentColor"/>
             </svg>
           </div>
           <div>
             <h1 class="text-lg font-black tracking-wider text-white flex items-center gap-1.5">
-              ISOKIN <span class="text-crimson-500 text-xs font-mono font-bold px-1.5 py-0.5 rounded bg-crimson-950/80 border border-crimson-800">FORCE LAB</span>
+              ISOKIN <span class="text-brand-400 text-xs font-mono font-bold px-1.5 py-0.5 rounded bg-brand-950/90 border border-brand-800">SESSION LAB</span>
             </h1>
-            <p class="text-[11px] text-slate-400">Avaliação Isométrica de Tração</p>
+            <p class="text-[10px] text-rose-300/70 font-mono tracking-tight uppercase">Bateria Neuromuscular Completa em Mesma Sessão</p>
           </div>
         </div>
 
-        <!-- Botão Mobile para alternar abas -->
-        <div class="flex sm:hidden gap-1 bg-surface-800 p-1 rounded-lg border border-surface-700">
-          <button onclick="switchTab('evaluation')" id="tab-btn-eval-mobile" class="px-2.5 py-1 text-xs font-semibold rounded bg-crimson-600 text-white transition">Avaliar</button>
+        <!-- Abas Mobile -->
+        <div class="flex sm:hidden gap-1 bg-dark-850 p-1 rounded-lg border border-dark-700">
+          <button onclick="switchTab('evaluation')" id="tab-btn-eval-mobile" class="px-2.5 py-1 text-xs font-semibold rounded bg-brand-600 text-white transition">Avaliar</button>
           <button onclick="switchTab('students')" id="tab-btn-students-mobile" class="px-2.5 py-1 text-xs font-semibold rounded text-slate-400 transition">Alunos</button>
           <button onclick="switchTab('history')" id="tab-btn-history-mobile" class="px-2.5 py-1 text-xs font-semibold rounded text-slate-400 transition">Evolução</button>
         </div>
       </div>
 
-      <!-- Abas no Desktop / iPad -->
-      <nav class="hidden sm:flex items-center gap-1.5 bg-surface-800/90 p-1.5 rounded-xl border border-surface-700/70">
-        <button onclick="switchTab('evaluation')" id="tab-btn-eval" class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold bg-crimson-600 text-white shadow-sm transition">
+      <!-- Abas Desktop / Tablet -->
+      <nav class="hidden sm:flex items-center gap-1.5 bg-dark-850 p-1.5 rounded-xl border border-dark-700">
+        <button onclick="switchTab('evaluation')" id="tab-btn-eval" class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold bg-brand-600 text-white shadow-md shadow-brand-950/50 transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
           Nova Avaliação
         </button>
@@ -121,13 +126,13 @@
 
       <!-- Ações Rápidas -->
       <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-        <button onclick="openAiModal()" class="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-surface-750 hover:bg-surface-700 border border-slate-700 text-xs font-medium text-slate-200 transition">
+        <button onclick="openAiModal()" class="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-dark-800 hover:bg-dark-750 border border-dark-600 text-xs font-medium text-slate-200 transition">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           AI Studio API
         </button>
-        <button onclick="window.print()" class="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-crimson-600 hover:bg-crimson-500 text-white text-xs font-semibold shadow-md transition">
+        <button onclick="window.print()" class="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-gradient-to-r from-brand-600 to-rose-600 hover:from-brand-500 hover:to-rose-500 text-white text-xs font-semibold shadow-lg shadow-brand-950/60 transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-          <span class="hidden md:inline">Imprimir Laudo</span>
+          <span class="hidden md:inline">Gerar Laudo Clínico / PDF</span>
         </button>
       </div>
 
@@ -142,18 +147,18 @@
     <!-- ========================================== -->
     <div id="tab-evaluation" class="space-y-6">
       
-      <!-- Cartão: Dados do Aluno & Contexto -->
-      <div class="bg-surface-850 rounded-2xl border border-surface-700/80 p-4 sm:p-6 shadow-xl">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-surface-700/60 gap-3">
+      <!-- Cartão: Identificação & Contexto -->
+      <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-4 sm:p-6 shadow-xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-dark-700/70 gap-3">
           <div>
             <h2 class="text-sm font-bold text-white tracking-wide uppercase flex items-center gap-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-crimson-500"></span> 
+              <span class="w-2.5 h-2.5 rounded-full bg-brand-500 shadow-sm shadow-brand-500"></span> 
               Identificação & Contextualização
             </h2>
-            <p class="text-xs text-slate-400">Selecione um aluno cadastrado ou preencha avulso</p>
+            <p class="text-xs text-slate-400">Selecione um aluno cadastrado ou preencha diretamente</p>
           </div>
           <div class="flex items-center gap-2">
-            <select id="quick-student-select" onchange="loadStudentToEval(this.value)" class="bg-surface-800 border border-surface-600 text-xs rounded-xl px-3 py-2 text-slate-200 focus:border-crimson-500 focus:outline-none w-full sm:w-64 font-medium">
+            <select id="quick-student-select" onchange="loadStudentToEval(this.value)" class="bg-dark-900 border border-dark-600 text-xs rounded-xl px-3 py-2 text-slate-200 focus:border-brand-500 focus:outline-none w-full sm:w-64 font-medium">
               <option value="">Carregar Aluno Cadastrado...</option>
             </select>
           </div>
@@ -162,31 +167,31 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <!-- Nome -->
           <div class="space-y-1.5">
-            <label class="text-[11px] font-semibold text-slate-300 uppercase tracking-wider">Nome Completo</label>
-            <input type="text" id="eval-name" placeholder="Ex: Roberto Carlos" class="w-full bg-surface-800 border border-surface-600 rounded-xl px-3.5 py-2 text-sm text-white focus:border-crimson-500 focus:outline-none transition">
+            <label class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-wider">Nome Completo</label>
+            <input type="text" id="eval-name" placeholder="Ex: Lucas Vasconcelos" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3.5 py-2 text-sm text-white focus:border-brand-500 focus:outline-none transition">
           </div>
 
-          <!-- Data da Avaliação -->
+          <!-- Data -->
           <div class="space-y-1.5">
-            <label class="text-[11px] font-semibold text-slate-300 uppercase tracking-wider">Data do Teste</label>
-            <input type="date" id="eval-date" class="w-full bg-surface-800 border border-surface-600 rounded-xl px-3.5 py-2 text-sm text-white focus:border-crimson-500 focus:outline-none transition font-mono">
+            <label class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-wider">Data do Teste</label>
+            <input type="date" id="eval-date" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3.5 py-2 text-sm text-white focus:border-brand-500 focus:outline-none transition font-mono">
           </div>
 
-          <!-- Peso Corporal -->
+          <!-- Peso -->
           <div class="space-y-1.5">
-            <label class="text-[11px] font-semibold text-slate-300 uppercase tracking-wider">Massa Corporal (kg)</label>
-            <input type="number" id="eval-weight" inputmode="decimal" step="0.1" placeholder="Ex: 75.5" oninput="calculateAll()" class="w-full bg-surface-800 border border-surface-600 rounded-xl px-3.5 py-2 text-sm text-white focus:border-crimson-500 focus:outline-none transition font-mono">
+            <label class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-wider">Massa Corporal (kg)</label>
+            <input type="number" id="eval-weight" inputmode="decimal" step="0.1" placeholder="Ex: 78.0" oninput="calculateAll()" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3.5 py-2 text-sm text-white focus:border-brand-500 focus:outline-none transition font-mono">
           </div>
 
           <!-- Idade & Sexo -->
           <div class="grid grid-cols-2 gap-2">
             <div class="space-y-1.5">
-              <label class="text-[11px] font-semibold text-slate-300 uppercase tracking-wider">Idade</label>
-              <input type="number" id="eval-age" placeholder="Ex: 32" class="w-full bg-surface-800 border border-surface-600 rounded-xl px-3 py-2 text-sm text-white focus:border-crimson-500 focus:outline-none transition font-mono">
+              <label class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-wider">Idade</label>
+              <input type="number" id="eval-age" placeholder="Ex: 32" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3 py-2 text-sm text-white focus:border-brand-500 focus:outline-none transition font-mono">
             </div>
             <div class="space-y-1.5">
-              <label class="text-[11px] font-semibold text-slate-300 uppercase tracking-wider">Sexo</label>
-              <select id="eval-gender" class="w-full bg-surface-800 border border-surface-600 rounded-xl px-2 py-2 text-sm text-white focus:border-crimson-500 focus:outline-none transition">
+              <label class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-wider">Sexo</label>
+              <select id="eval-gender" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-2 py-2 text-sm text-white focus:border-brand-500 focus:outline-none transition">
                 <option value="M">Masc</option>
                 <option value="F">Fem</option>
               </select>
@@ -194,16 +199,15 @@
           </div>
         </div>
 
-        <!-- Linha de Menus Suspensos Estruturados: Modalidade e Contexto -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 pt-4 border-t border-surface-700/60">
+        <!-- Menus Suspensos de Modalidade & Contexto -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 pt-4 border-t border-dark-700/70">
           
-          <!-- Modalidade Esportiva / Rotina -->
           <div class="space-y-1.5">
             <label class="text-[11px] font-semibold text-slate-300 uppercase tracking-wider flex items-center justify-between">
               <span>Modalidade Primária</span>
-              <span class="text-[10px] text-crimson-400 font-mono">Demandas Funcionais</span>
+              <span class="text-[10px] text-brand-400 font-mono">Demandas Funcionais</span>
             </label>
-            <select id="eval-modality" onchange="calculateAll()" class="w-full bg-surface-800 border border-surface-600 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-crimson-500 focus:outline-none transition font-medium">
+            <select id="eval-modality" onchange="calculateAll()" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-brand-500 focus:outline-none transition font-medium">
               <optgroup label="Saúde Geral & Vida Diária">
                 <option value="civil" selected>Civil / Saúde Geral & Bem-Estar</option>
                 <option value="sedentary">Início de Treinamento / Sedentário</option>
@@ -227,13 +231,12 @@
             </select>
           </div>
 
-          <!-- Contexto Clínico & Critério de Corte -->
           <div class="space-y-1.5">
             <label class="text-[11px] font-semibold text-slate-300 uppercase tracking-wider flex items-center justify-between">
               <span>Contexto Clínico & Tolerância de Assimetria</span>
               <span class="text-[10px] text-emerald-400 font-mono">Evidência Científica</span>
             </label>
-            <select id="eval-context" onchange="calculateAll()" class="w-full bg-surface-800 border border-surface-600 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-crimson-500 focus:outline-none transition font-medium">
+            <select id="eval-context" onchange="calculateAll()" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-brand-500 focus:outline-none transition font-medium">
               <optgroup label="Saúde & Prevenção">
                 <option value="acsm" selected>Manutenção da Saúde Funcional (ACSM - Tolerância 15%)</option>
                 <option value="ewgsop2">Sarcopenia & Risco de Queda (EWGSOP2 - Alerta Precoce)</option>
@@ -251,207 +254,196 @@
         </div>
       </div>
 
-      <!-- ÁREA DE COLETA DE FORÇA (ISOMETRIA COM BALANÇA DE GUINDASTE) -->
+      <!-- ÁREA DE COLETA COM TEMA VERMELHO ESCURO / DOURADO -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-        <!-- GRUPO 1: QUADRÍCEPS (EXTENSÃO DE JOELHO A 60°-90°) -->
-        <div class="bg-surface-850 rounded-2xl border border-surface-700/80 p-4 sm:p-5 shadow-lg relative overflow-hidden">
-          <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500"></div>
+        <!-- GRUPO 1: ISQUIOTIBIAIS (FLEXORES) -->
+        <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-4 sm:p-5 shadow-xl relative overflow-hidden">
+          <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-500"></div>
           <div class="flex items-center justify-between mb-4 pl-2">
             <div>
               <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                Quadríceps (Extensores)
+                <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+                Grupo 1: Flexão de Joelho (Isquiotibiais)
               </h3>
-              <p class="text-xs text-slate-400">Pico Isométrico (kgf) registrado na balança</p>
+              <p class="text-xs text-slate-400">3 tentativas com balança de tração na mesma sessão</p>
             </div>
-            <span class="text-[11px] font-mono bg-blue-950/80 text-blue-300 border border-blue-800 px-2 py-0.5 rounded-md font-semibold">Agonista</span>
+            <span class="text-[11px] font-mono bg-dark-900 text-amber-400 border border-amber-900/40 px-2.5 py-0.5 rounded-md font-semibold">Exemplo Típico</span>
           </div>
 
-          <!-- Lado Esquerdo vs Direito em Cartões -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            
             <!-- Esquerdo -->
-            <div class="bg-surface-800/80 rounded-xl p-3 border border-surface-700">
-              <span class="text-xs font-bold text-slate-300 block mb-2 uppercase tracking-wide">Membro Esquerdo (ME)</span>
+            <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+              <span class="text-xs font-bold text-slate-300 block mb-2 uppercase tracking-wide">Lado Esquerdo (E)</span>
               <div class="grid grid-cols-3 gap-2">
                 <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T1 (kg)</label>
-                  <input type="number" id="quad-l1" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-surface-900 border border-surface-600 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-blue-500 focus:outline-none font-mono">
+                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T1:</label>
+                  <input type="number" id="ham-l1" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-brand-500 focus:outline-none font-mono">
                 </div>
                 <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T2 (kg)</label>
-                  <input type="number" id="quad-l2" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-surface-900 border border-surface-600 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-blue-500 focus:outline-none font-mono">
+                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T2:</label>
+                  <input type="number" id="ham-l2" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-brand-500 focus:outline-none font-mono">
                 </div>
                 <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T3 (kg)</label>
-                  <input type="number" id="quad-l3" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-surface-900 border border-surface-600 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-blue-500 focus:outline-none font-mono">
+                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T3:</label>
+                  <input type="number" id="ham-l3" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-brand-500 focus:outline-none font-mono">
                 </div>
               </div>
-              <div class="mt-2.5 pt-2 border-t border-surface-700/60 flex justify-between items-center text-xs">
-                <span class="text-slate-400 font-mono">Pico ME:</span>
-                <span id="quad-l-peak" class="font-bold text-blue-400 font-mono text-sm">0.0 kg</span>
+              <div class="mt-2.5 pt-2 border-t border-dark-700/80 flex justify-between items-center text-xs">
+                <span class="text-slate-400 font-mono">Pico:</span>
+                <span id="ham-l-peak" class="font-bold text-brand-400 font-mono text-sm">0.0 kg</span>
               </div>
             </div>
 
             <!-- Direito -->
-            <div class="bg-surface-800/80 rounded-xl p-3 border border-surface-700">
-              <span class="text-xs font-bold text-slate-300 block mb-2 uppercase tracking-wide">Membro Direito (MD)</span>
+            <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+              <span class="text-xs font-bold text-slate-300 block mb-2 uppercase tracking-wide">Lado Direito (D)</span>
               <div class="grid grid-cols-3 gap-2">
                 <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T1 (kg)</label>
-                  <input type="number" id="quad-r1" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-surface-900 border border-surface-600 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-blue-500 focus:outline-none font-mono">
+                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T1:</label>
+                  <input type="number" id="ham-r1" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-brand-500 focus:outline-none font-mono">
                 </div>
                 <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T2 (kg)</label>
-                  <input type="number" id="quad-r2" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-surface-900 border border-surface-600 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-blue-500 focus:outline-none font-mono">
+                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T2:</label>
+                  <input type="number" id="ham-r2" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-brand-500 focus:outline-none font-mono">
                 </div>
                 <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T3 (kg)</label>
-                  <input type="number" id="quad-r3" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-surface-900 border border-surface-600 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-blue-500 focus:outline-none font-mono">
+                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T3:</label>
+                  <input type="number" id="ham-r3" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-brand-500 focus:outline-none font-mono">
                 </div>
               </div>
-              <div class="mt-2.5 pt-2 border-t border-surface-700/60 flex justify-between items-center text-xs">
-                <span class="text-slate-400 font-mono">Pico MD:</span>
-                <span id="quad-r-peak" class="font-bold text-blue-400 font-mono text-sm">0.0 kg</span>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Assimetria Quadríceps -->
-          <div class="mt-4 p-3 bg-surface-800 rounded-xl border border-surface-700 flex items-center justify-between">
-            <span class="text-xs font-semibold text-slate-300">Défice Bilateral Quadríceps:</span>
-            <span id="quad-asym-badge" class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-surface-700 text-slate-400">0.0% (Equilibrado)</span>
-          </div>
-        </div>
-
-        <!-- GRUPO 2: ISQUIOTIBIAIS (FLEXÃO DE JOELHO A 30°-45° OU NORDIC ISO) -->
-        <div class="bg-surface-850 rounded-2xl border border-surface-700/80 p-4 sm:p-5 shadow-lg relative overflow-hidden">
-          <div class="absolute top-0 left-0 w-1.5 h-full bg-crimson-500"></div>
-          <div class="flex items-center justify-between mb-4 pl-2">
-            <div>
-              <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                Isquiotibiais (Flexores)
-              </h3>
-              <p class="text-xs text-slate-400">Pico Isométrico (kgf) registrado na balança</p>
-            </div>
-            <span class="text-[11px] font-mono bg-crimson-950/80 text-crimson-300 border border-crimson-800 px-2 py-0.5 rounded-md font-semibold">Antagonista</span>
-          </div>
-
-          <!-- Lado Esquerdo vs Direito em Cartões -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            
-            <!-- Esquerdo -->
-            <div class="bg-surface-800/80 rounded-xl p-3 border border-surface-700">
-              <span class="text-xs font-bold text-slate-300 block mb-2 uppercase tracking-wide">Membro Esquerdo (ME)</span>
-              <div class="grid grid-cols-3 gap-2">
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T1 (kg)</label>
-                  <input type="number" id="ham-l1" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-surface-900 border border-surface-600 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-crimson-500 focus:outline-none font-mono">
-                </div>
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T2 (kg)</label>
-                  <input type="number" id="ham-l2" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-surface-900 border border-surface-600 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-crimson-500 focus:outline-none font-mono">
-                </div>
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T3 (kg)</label>
-                  <input type="number" id="ham-l3" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-surface-900 border border-surface-600 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-crimson-500 focus:outline-none font-mono">
-                </div>
-              </div>
-              <div class="mt-2.5 pt-2 border-t border-surface-700/60 flex justify-between items-center text-xs">
-                <span class="text-slate-400 font-mono">Pico ME:</span>
-                <span id="ham-l-peak" class="font-bold text-crimson-400 font-mono text-sm">0.0 kg</span>
+              <div class="mt-2.5 pt-2 border-t border-dark-700/80 flex justify-between items-center text-xs">
+                <span class="text-slate-400 font-mono">Pico:</span>
+                <span id="ham-r-peak" class="font-bold text-brand-400 font-mono text-sm">0.0 kg</span>
               </div>
             </div>
-
-            <!-- Direito -->
-            <div class="bg-surface-800/80 rounded-xl p-3 border border-surface-700">
-              <span class="text-xs font-bold text-slate-300 block mb-2 uppercase tracking-wide">Membro Direito (MD)</span>
-              <div class="grid grid-cols-3 gap-2">
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T1 (kg)</label>
-                  <input type="number" id="ham-r1" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-surface-900 border border-surface-600 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-crimson-500 focus:outline-none font-mono">
-                </div>
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T2 (kg)</label>
-                  <input type="number" id="ham-r2" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-surface-900 border border-surface-600 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-crimson-500 focus:outline-none font-mono">
-                </div>
-                <div>
-                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T3 (kg)</label>
-                  <input type="number" id="ham-r3" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-surface-900 border border-surface-600 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-crimson-500 focus:outline-none font-mono">
-                </div>
-              </div>
-              <div class="mt-2.5 pt-2 border-t border-surface-700/60 flex justify-between items-center text-xs">
-                <span class="text-slate-400 font-mono">Pico MD:</span>
-                <span id="ham-r-peak" class="font-bold text-crimson-400 font-mono text-sm">0.0 kg</span>
-              </div>
-            </div>
-
           </div>
 
-          <!-- Assimetria Isquiotibiais -->
-          <div class="mt-4 p-3 bg-surface-800 rounded-xl border border-surface-700 flex items-center justify-between">
+          <div class="mt-4 p-3 bg-dark-900 rounded-xl border border-dark-700 flex items-center justify-between">
             <span class="text-xs font-semibold text-slate-300">Défice Bilateral Isquiotibiais:</span>
-            <span id="ham-asym-badge" class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-surface-700 text-slate-400">0.0% (Equilibrado)</span>
+            <span id="ham-asym-badge" class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-dark-800 text-slate-400">0.0% (Equilibrado)</span>
+          </div>
+        </div>
+
+        <!-- GRUPO 2: QUADRÍCEPS (EXTENSORES) -->
+        <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-4 sm:p-5 shadow-xl relative overflow-hidden">
+          <div class="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
+          <div class="flex items-center justify-between mb-4 pl-2">
+            <div>
+              <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                Grupo 2: Extensão de Joelho (Quadríceps)
+              </h3>
+              <p class="text-xs text-slate-400">3 tentativas com a mesma balança de tração</p>
+            </div>
+            <span class="text-[11px] font-mono bg-dark-900 text-amber-400 border border-amber-900/40 px-2.5 py-0.5 rounded-md font-semibold">Exemplo Típico</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Esquerdo -->
+            <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+              <span class="text-xs font-bold text-slate-300 block mb-2 uppercase tracking-wide">Lado Esquerdo (E)</span>
+              <div class="grid grid-cols-3 gap-2">
+                <div>
+                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T1:</label>
+                  <input type="number" id="quad-l1" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-amber-500 focus:outline-none font-mono">
+                </div>
+                <div>
+                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T2:</label>
+                  <input type="number" id="quad-l2" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-amber-500 focus:outline-none font-mono">
+                </div>
+                <div>
+                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T3:</label>
+                  <input type="number" id="quad-l3" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-amber-500 focus:outline-none font-mono">
+                </div>
+              </div>
+              <div class="mt-2.5 pt-2 border-t border-dark-700/80 flex justify-between items-center text-xs">
+                <span class="text-slate-400 font-mono">Pico:</span>
+                <span id="quad-l-peak" class="font-bold text-amber-400 font-mono text-sm">0.0 kg</span>
+              </div>
+            </div>
+
+            <!-- Direito -->
+            <div class="bg-dark-900/90 rounded-xl p-3 border border-dark-700">
+              <span class="text-xs font-bold text-slate-300 block mb-2 uppercase tracking-wide">Lado Direito (D)</span>
+              <div class="grid grid-cols-3 gap-2">
+                <div>
+                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T1:</label>
+                  <input type="number" id="quad-r1" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-amber-500 focus:outline-none font-mono">
+                </div>
+                <div>
+                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T2:</label>
+                  <input type="number" id="quad-r2" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-amber-500 focus:outline-none font-mono">
+                </div>
+                <div>
+                  <label class="text-[10px] text-slate-400 font-mono block mb-1">T3:</label>
+                  <input type="number" id="quad-r3" inputmode="decimal" step="0.5" placeholder="0.0" oninput="calculateAll()" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2 text-center text-sm font-bold text-white focus:border-amber-500 focus:outline-none font-mono">
+                </div>
+              </div>
+              <div class="mt-2.5 pt-2 border-t border-dark-700/80 flex justify-between items-center text-xs">
+                <span class="text-slate-400 font-mono">Pico:</span>
+                <span id="quad-r-peak" class="font-bold text-amber-400 font-mono text-sm">0.0 kg</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 p-3 bg-dark-900 rounded-xl border border-dark-700 flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-300">Défice Bilateral Quadríceps:</span>
+            <span id="quad-asym-badge" class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-dark-800 text-slate-400">0.0% (Equilibrado)</span>
           </div>
         </div>
 
       </div>
 
-      <!-- MÉTRICAS FUNCIONAIS E RELAÇÃO I:Q (AGOMISTA/ANTAGONISTA) -->
+      <!-- EQUILÍBRIO DA SESSÃO & RAZÃO I:Q -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        
-        <!-- Razão I:Q ME -->
-        <div class="bg-surface-850 p-4 rounded-2xl border border-surface-700/80 shadow-md">
-          <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Razão I:Q Esquerda</div>
+        <div class="bg-dark-850 p-4 rounded-2xl border border-dark-700/80 shadow-md">
+          <div class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-wider mb-1">Razão I:Q Lado E</div>
           <div class="flex items-baseline gap-2">
-            <span id="ratio-l-val" class="text-2xl font-black font-mono text-white">0.00</span>
-            <span id="ratio-l-status" class="text-xs font-semibold px-2 py-0.5 rounded bg-surface-800 text-slate-400 border border-surface-700">Aguardando dados</span>
+            <span id="ratio-l-val" class="text-2xl font-black font-mono text-brand-400">0.0%</span>
+            <span id="ratio-l-status" class="text-xs font-semibold px-2 py-0.5 rounded bg-dark-900 text-slate-400 border border-dark-700">Sem dados</span>
           </div>
-          <p class="text-[10px] text-slate-400 mt-2">Referência clínica: 0.60 a 0.75 (Croisier)</p>
+          <p class="text-[10px] text-slate-400 mt-2">Ref. Ideal: 55% - 65%</p>
         </div>
 
-        <!-- Razão I:Q MD -->
-        <div class="bg-surface-850 p-4 rounded-2xl border border-surface-700/80 shadow-md">
-          <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Razão I:Q Direita</div>
+        <div class="bg-dark-850 p-4 rounded-2xl border border-dark-700/80 shadow-md">
+          <div class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-wider mb-1">Razão I:Q Lado D</div>
           <div class="flex items-baseline gap-2">
-            <span id="ratio-r-val" class="text-2xl font-black font-mono text-white">0.00</span>
-            <span id="ratio-r-status" class="text-xs font-semibold px-2 py-0.5 rounded bg-surface-800 text-slate-400 border border-surface-700">Aguardando dados</span>
+            <span id="ratio-r-val" class="text-2xl font-black font-mono text-brand-400">0.0%</span>
+            <span id="ratio-r-status" class="text-xs font-semibold px-2 py-0.5 rounded bg-dark-900 text-slate-400 border border-dark-700">Sem dados</span>
           </div>
-          <p class="text-[10px] text-slate-400 mt-2">Referência clínica: 0.60 a 0.75 (Croisier)</p>
+          <p class="text-[10px] text-slate-400 mt-2">Ref. Ideal: 55% - 65%</p>
         </div>
 
-        <!-- Força Relativa Pico / Peso Corporal -->
-        <div class="bg-surface-850 p-4 rounded-2xl border border-surface-700/80 shadow-md">
-          <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Força Relativa Máxima</div>
+        <div class="bg-dark-850 p-4 rounded-2xl border border-dark-700/80 shadow-md">
+          <div class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-wider mb-1">Força Relativa Máxima</div>
           <div class="flex items-baseline gap-2">
-            <span id="rel-force-val" class="text-2xl font-black font-mono text-white">0.0%</span>
-            <span class="text-xs text-slate-400 font-mono">% da Massa Corporal</span>
+            <span id="rel-force-val" class="text-2xl font-black font-mono text-amber-400">0.00</span>
+            <span class="text-xs text-slate-400 font-mono">kg/kg (Massa Corporal)</span>
           </div>
-          <p class="text-[10px] text-slate-400 mt-2">Normalizado pelo peso corporal do avaliado</p>
+          <p class="text-[10px] text-slate-400 mt-2">Normalizado pelo peso do avaliado</p>
         </div>
-
       </div>
 
-      <!-- PARECER TÉCNICO E CONDUTA RECOMENDADA -->
-      <div class="bg-surface-850 rounded-2xl border border-surface-700/80 p-5 shadow-xl space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-surface-700 gap-2">
+      <!-- PARECER TÉCNICO -->
+      <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-5 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-dark-700 gap-2">
           <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-            <svg class="w-4 h-4 text-crimson-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             Parecer Diagnóstico & Diretrizes Clínicas
           </h3>
-          <button onclick="generateAiReport()" id="btn-ai-gen" class="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-800 hover:bg-surface-750 border border-crimson-600/50 text-crimson-400 hover:text-crimson-300 text-xs font-semibold transition">
+          <button onclick="generateAiReport()" id="btn-ai-gen" class="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-750 border border-brand-600/50 text-brand-400 hover:text-brand-300 text-xs font-semibold transition">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             Gerar Parecer via Google AI Studio
           </button>
         </div>
 
-        <div id="diagnostic-text" class="text-sm text-slate-300 leading-relaxed bg-surface-800/60 p-4 rounded-xl border border-surface-700/60 font-sans">
+        <div id="diagnostic-text" class="text-sm text-slate-300 leading-relaxed bg-dark-900/80 p-4 rounded-xl border border-dark-700/60 font-sans">
           Preencha os valores de força para gerar a interpretação automática com base no contexto selecionado.
         </div>
 
         <div class="flex flex-wrap items-center justify-end gap-3 pt-2">
-          <button onclick="saveCurrentAssessment()" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-crimson-600 hover:bg-crimson-500 text-white font-semibold text-xs tracking-wide uppercase transition shadow-lg shadow-crimson-900/30 flex items-center justify-center gap-2">
+          <button onclick="saveCurrentAssessment()" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-rose-600 hover:from-brand-500 hover:to-rose-500 text-white font-semibold text-xs tracking-wide uppercase transition shadow-lg shadow-brand-950/50 flex items-center justify-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
             Salvar no Histórico do Aluno
           </button>
@@ -461,26 +453,25 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- ABA 2: GESTÃO DE ALUNOS (ESTILO WEBDIET)  -->
+    <!-- ABA 2: GESTÃO DE ALUNOS                   -->
     <!-- ========================================== -->
     <div id="tab-students" class="hidden space-y-6">
       
-      <!-- Cabeçalho da Aba -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 class="text-base font-bold text-white tracking-wide uppercase">Banco de Alunos & Pacientes</h2>
-          <p class="text-xs text-slate-400">Cadastre seus avaliados e controle suas rotinas com armazenamento seguro</p>
+          <p class="text-xs text-slate-400">Cadastre seus avaliados e controle suas rotinas com armazenamento local seguro</p>
         </div>
         <div class="flex items-center gap-2">
-          <button onclick="openNewStudentModal()" class="px-4 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-500 text-white text-xs font-semibold shadow-md transition flex items-center gap-2">
+          <button onclick="openNewStudentModal()" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold shadow-md transition flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
             Novo Aluno
           </button>
-          <button onclick="exportDataBackup()" title="Baixar arquivo de backup de todos os alunos" class="px-3 py-2 rounded-xl bg-surface-800 hover:bg-surface-700 border border-surface-600 text-xs font-medium text-slate-300 transition flex items-center gap-1.5">
+          <button onclick="exportDataBackup()" title="Baixar arquivo de backup" class="px-3 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-dark-700 text-xs font-medium text-slate-300 transition flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
             Backup
           </button>
-          <label class="px-3 py-2 rounded-xl bg-surface-800 hover:bg-surface-700 border border-surface-600 text-xs font-medium text-slate-300 transition flex items-center gap-1.5 cursor-pointer">
+          <label class="px-3 py-2 rounded-xl bg-dark-850 hover:bg-dark-800 border border-dark-700 text-xs font-medium text-slate-300 transition flex items-center gap-1.5 cursor-pointer">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
             Restaurar
             <input type="file" id="import-file" accept=".json" onchange="importDataBackup(event)" class="hidden">
@@ -488,16 +479,14 @@
         </div>
       </div>
 
-      <!-- Barra de Busca -->
-      <div class="bg-surface-850 p-3 rounded-2xl border border-surface-700/80">
-        <input type="text" id="student-search-input" oninput="renderStudentsTable()" placeholder="Buscar aluno por nome ou objetivo..." class="w-full bg-surface-800 border border-surface-600 rounded-xl px-4 py-2.5 text-sm text-white focus:border-crimson-500 focus:outline-none transition">
+      <div class="bg-dark-850 p-3 rounded-2xl border border-dark-700/80">
+        <input type="text" id="student-search-input" oninput="renderStudentsTable()" placeholder="Buscar aluno por nome ou objetivo..." class="w-full bg-dark-900 border border-dark-600 rounded-xl px-4 py-2.5 text-sm text-white focus:border-brand-500 focus:outline-none transition">
       </div>
 
-      <!-- Tabela / Lista de Alunos Responsiva -->
-      <div class="bg-surface-850 rounded-2xl border border-surface-700/80 overflow-hidden shadow-xl">
+      <div class="bg-dark-850 rounded-2xl border border-dark-700/80 overflow-hidden shadow-xl">
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs text-slate-300">
-            <thead class="bg-surface-800/80 text-[11px] uppercase tracking-wider text-slate-400 border-b border-surface-700">
+            <thead class="bg-dark-900/90 text-[11px] uppercase tracking-wider text-rose-300/80 border-b border-dark-700">
               <tr>
                 <th class="py-3 px-4">Aluno</th>
                 <th class="py-3 px-4">Idade / Sexo</th>
@@ -507,9 +496,7 @@
                 <th class="py-3 px-4 text-right">Ações</th>
               </tr>
             </thead>
-            <tbody id="students-table-body" class="divide-y divide-surface-700/60 font-medium">
-              <!-- Preenchido via JavaScript -->
-            </tbody>
+            <tbody id="students-table-body" class="divide-y divide-dark-700/60 font-medium"></tbody>
           </table>
         </div>
         <div id="no-students-placeholder" class="py-12 text-center text-slate-500 text-xs hidden">
@@ -520,31 +507,29 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- ABA 3: EVOLUÇÃO PERIÓDICA (HISTÓRICO)      -->
+    <!-- ABA 3: EVOLUÇÃO PERIÓDICA                 -->
     <!-- ========================================== -->
     <div id="tab-history" class="hidden space-y-6">
       
-      <!-- Seletor do Aluno para Visualizar Evolução -->
-      <div class="bg-surface-850 p-4 sm:p-6 rounded-2xl border border-surface-700/80 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="bg-dark-850 p-4 sm:p-6 rounded-2xl border border-dark-700/80 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 class="text-base font-bold text-white tracking-wide uppercase">Linha do Tempo & Evolução</h2>
-          <p class="text-xs text-slate-400">Acompanhe a progressão de força e redução de assimetria longitudinal</p>
+          <p class="text-xs text-slate-400">Acompanhe a progressão de força e redução de assimetria ao longo do tempo</p>
         </div>
         <div class="w-full sm:w-72">
-          <select id="history-student-select" onchange="renderHistoryCharts(this.value)" class="w-full bg-surface-800 border border-surface-600 rounded-xl px-3.5 py-2 text-sm text-white focus:border-crimson-500 focus:outline-none transition">
+          <select id="history-student-select" onchange="renderHistoryCharts(this.value)" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3.5 py-2 text-sm text-white focus:border-brand-500 focus:outline-none transition">
             <option value="">Selecione um aluno...</option>
           </select>
         </div>
       </div>
 
-      <!-- Gráficos de Evolução -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
-        <!-- Gráfico 1: Evolução da Força Máxima (kg) -->
-        <div class="bg-surface-850 p-4 sm:p-6 rounded-2xl border border-surface-700/80 shadow-xl">
+        <!-- Gráfico de Força -->
+        <div class="bg-dark-850 p-4 sm:p-6 rounded-2xl border border-dark-700/80 shadow-xl">
           <h3 class="text-xs font-bold text-white uppercase tracking-wider mb-1 flex items-center justify-between">
             <span>Progressão de Carga Máxima (kgf)</span>
-            <span class="text-[10px] text-blue-400 font-mono">Pico Bilateral</span>
+            <span class="text-[10px] text-amber-400 font-mono">Pico Bilateral</span>
           </h3>
           <p class="text-[11px] text-slate-400 mb-4">Evolução do Quadríceps e Isquiotibiais ao longo dos testes</p>
           <div class="h-64 relative">
@@ -552,13 +537,13 @@
           </div>
         </div>
 
-        <!-- Gráfico 2: Evolução das Assimetrias (%) e Razão I:Q -->
-        <div class="bg-surface-850 p-4 sm:p-6 rounded-2xl border border-surface-700/80 shadow-xl">
+        <!-- Gráfico de Assimetria -->
+        <div class="bg-dark-850 p-4 sm:p-6 rounded-2xl border border-dark-700/80 shadow-xl">
           <h3 class="text-xs font-bold text-white uppercase tracking-wider mb-1 flex items-center justify-between">
             <span>Assimetria Bilateral & Relação I:Q</span>
-            <span class="text-[10px] text-crimson-400 font-mono">Metas de Simetria</span>
+            <span class="text-[10px] text-brand-400 font-mono">Metas de Simetria</span>
           </h3>
-          <p class="text-[11px] text-slate-400 mb-4">Aproximação da faixa de segurança (&lt; 10-15%) e razão funcional</p>
+          <p class="text-[11px] text-slate-400 mb-4">Aproximação da faixa segura (&lt; 10-15%)</p>
           <div class="h-64 relative">
             <canvas id="chart-asym-history"></canvas>
           </div>
@@ -566,14 +551,13 @@
 
       </div>
 
-      <!-- Tabela Histórica Detalhada das Avaliações do Aluno -->
-      <div class="bg-surface-850 rounded-2xl border border-surface-700/80 overflow-hidden shadow-xl">
-        <div class="p-4 border-b border-surface-700 text-xs font-bold text-white uppercase tracking-wider">
+      <div class="bg-dark-850 rounded-2xl border border-dark-700/80 overflow-hidden shadow-xl">
+        <div class="p-4 border-b border-dark-700 text-xs font-bold text-white uppercase tracking-wider">
           Histórico Completo de Testes
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs text-slate-300">
-            <thead class="bg-surface-800 text-[10px] uppercase tracking-wider text-slate-400 border-b border-surface-700">
+            <thead class="bg-dark-900 text-[10px] uppercase tracking-wider text-rose-300/80 border-b border-dark-700">
               <tr>
                 <th class="py-2.5 px-4">Data</th>
                 <th class="py-2.5 px-4">Contexto</th>
@@ -584,9 +568,7 @@
                 <th class="py-2.5 px-4 text-right">Ação</th>
               </tr>
             </thead>
-            <tbody id="history-table-body" class="divide-y divide-surface-700/60 font-mono text-[11px]">
-              <!-- Inserido dinamicamente -->
-            </tbody>
+            <tbody id="history-table-body" class="divide-y divide-dark-700/60 font-mono text-[11px]"></tbody>
           </table>
         </div>
       </div>
@@ -595,10 +577,10 @@
 
   </main>
 
-  <!-- MODAL: CADASTRO / EDIÇÃO DE ALUNO -->
-  <div id="student-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-surface-850 border border-surface-700 max-w-md w-full rounded-2xl p-6 shadow-2xl space-y-4">
-      <div class="flex items-center justify-between pb-3 border-b border-surface-700">
+  <!-- MODAL: NOVO ALUNO -->
+  <div id="student-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-dark-850 border border-dark-700 max-w-md w-full rounded-2xl p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-dark-700">
         <h3 id="student-modal-title" class="text-sm font-bold text-white uppercase tracking-wider">Cadastrar Novo Aluno</h3>
         <button onclick="closeStudentModal()" class="text-slate-400 hover:text-white">&times;</button>
       </div>
@@ -608,17 +590,17 @@
       <div class="space-y-3 text-xs">
         <div>
           <label class="block text-slate-300 font-semibold mb-1">Nome Completo *</label>
-          <input type="text" id="modal-student-name" class="w-full bg-surface-800 border border-surface-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-crimson-500">
+          <input type="text" id="modal-student-name" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-slate-300 font-semibold mb-1">Idade</label>
-            <input type="number" id="modal-student-age" class="w-full bg-surface-800 border border-surface-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-crimson-500">
+            <input type="number" id="modal-student-age" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500">
           </div>
           <div>
             <label class="block text-slate-300 font-semibold mb-1">Sexo</label>
-            <select id="modal-student-gender" class="w-full bg-surface-800 border border-surface-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-crimson-500">
+            <select id="modal-student-gender" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500">
               <option value="M">Masculino</option>
               <option value="F">Feminino</option>
             </select>
@@ -628,17 +610,17 @@
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-slate-300 font-semibold mb-1">Massa Corporal (kg)</label>
-            <input type="number" id="modal-student-weight" step="0.1" class="w-full bg-surface-800 border border-surface-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-crimson-500">
+            <input type="number" id="modal-student-weight" step="0.1" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500">
           </div>
           <div>
             <label class="block text-slate-300 font-semibold mb-1">Telefone / WhatsApp</label>
-            <input type="text" id="modal-student-phone" placeholder="(00) 00000-0000" class="w-full bg-surface-800 border border-surface-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-crimson-500">
+            <input type="text" id="modal-student-phone" placeholder="(00) 00000-0000" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500">
           </div>
         </div>
 
         <div>
           <label class="block text-slate-300 font-semibold mb-1">Modalidade Padrão</label>
-          <select id="modal-student-modality" class="w-full bg-surface-800 border border-surface-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-crimson-500">
+          <select id="modal-student-modality" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500">
             <option value="civil">Civil / Saúde Geral</option>
             <option value="bjj">Brazilian Jiu-Jitsu</option>
             <option value="soccer">Futebol</option>
@@ -649,66 +631,62 @@
         </div>
 
         <div>
-          <label class="block text-slate-300 font-semibold mb-1">Notas Clínicas / Histórico de Lesões</label>
-          <textarea id="modal-student-notes" rows="2" placeholder="Ex: Histórico de entorse de tornozelo em 2024..." class="w-full bg-surface-800 border border-surface-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-crimson-500"></textarea>
+          <label class="block text-slate-300 font-semibold mb-1">Notas Clínicas</label>
+          <textarea id="modal-student-notes" rows="2" placeholder="Ex: Histórico de lesão, desconforto, cirurgias..." class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500"></textarea>
         </div>
       </div>
 
-      <div class="pt-3 border-t border-surface-700 flex justify-end gap-2">
-        <button onclick="closeStudentModal()" class="px-4 py-2 rounded-xl bg-surface-800 hover:bg-surface-700 text-slate-300 text-xs font-semibold">Cancelar</button>
-        <button onclick="saveStudentFromModal()" class="px-4 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-500 text-white text-xs font-semibold shadow-md">Salvar Aluno</button>
+      <div class="pt-3 border-t border-dark-700 flex justify-end gap-2">
+        <button onclick="closeStudentModal()" class="px-4 py-2 rounded-xl bg-dark-800 hover:bg-dark-750 text-slate-300 text-xs font-semibold">Cancelar</button>
+        <button onclick="saveStudentFromModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-brand-600 to-rose-600 hover:from-brand-500 hover:to-rose-500 text-white text-xs font-semibold shadow-md">Salvar Aluno</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: GOOGLE AI STUDIO (CONFIGURAÇÃO) -->
-  <div id="ai-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-surface-850 border border-surface-700 max-w-md w-full rounded-2xl p-6 shadow-2xl space-y-4">
-      <div class="flex items-center justify-between pb-3 border-b border-surface-700">
+  <!-- MODAL: API GEMINI -->
+  <div id="ai-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-dark-850 border border-dark-700 max-w-md w-full rounded-2xl p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-dark-700">
         <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-crimson-500"></span> Google AI Studio
+          <span class="w-2 h-2 rounded-full bg-brand-500"></span> Google AI Studio
         </h3>
         <button onclick="closeAiModal()" class="text-slate-400 hover:text-white">&times;</button>
       </div>
 
       <p class="text-xs text-slate-300 leading-relaxed">
-        Insira sua chave de API do <strong>Google AI Studio</strong> para gerar laudos diagnósticos automatizados baseados em evidência científica.
+        Insira sua chave de API do <strong>Google AI Studio</strong> para habilitar os pareceres automatizados.
       </p>
 
       <div class="space-y-3 text-xs">
         <div>
           <label class="block text-slate-300 font-semibold mb-1">Chave de API (API Key)</label>
-          <input type="password" id="ai-api-key" placeholder="AIzaSy..." class="w-full bg-surface-800 border border-surface-600 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-crimson-500">
+          <input type="password" id="ai-api-key" placeholder="AIzaSy..." class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-brand-500">
         </div>
         <div>
           <label class="block text-slate-300 font-semibold mb-1">Modelo Gemini</label>
-          <select id="ai-model" class="w-full bg-surface-800 border border-surface-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-crimson-500">
-            <option value="gemini-2.5-flash">Gemini 2.5 Flash (Ultrarrápido & Econômico)</option>
-            <option value="gemini-2.5-pro">Gemini 2.5 Pro (Raciocínio Clínico Avançado)</option>
+          <select id="ai-model" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+            <option value="gemini-2.5-flash">Gemini 2.5 Flash (Ultrarrápido)</option>
+            <option value="gemini-2.5-pro">Gemini 2.5 Pro (Clínico Avançado)</option>
           </select>
         </div>
       </div>
 
-      <div class="pt-3 border-t border-surface-700 flex justify-end gap-2">
-        <button onclick="closeAiModal()" class="px-4 py-2 rounded-xl bg-surface-800 hover:bg-surface-700 text-slate-300 text-xs font-semibold">Fechar</button>
-        <button onclick="saveAiConfig()" class="px-4 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-500 text-white text-xs font-semibold">Salvar Configuração</button>
+      <div class="pt-3 border-t border-dark-700 flex justify-end gap-2">
+        <button onclick="closeAiModal()" class="px-4 py-2 rounded-xl bg-dark-800 hover:bg-dark-750 text-slate-300 text-xs font-semibold">Fechar</button>
+        <button onclick="saveAiConfig()" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold">Salvar Configuração</button>
       </div>
     </div>
   </div>
 
   <!-- RODAPÉ -->
-  <footer class="mt-auto border-t border-surface-700/60 py-4 px-4 text-center text-xs text-slate-400 font-mono no-print">
-    ISOKIN FORCE LAB &bull; Biomecânica Clínica e Avaliação Neuromuscular
+  <footer class="mt-auto border-t border-dark-700/60 py-4 px-4 text-center text-xs text-slate-500 font-mono no-print">
+    ISOKIN SESSION LAB &bull; Biomecânica Clínica e Avaliação Neuromuscular
   </footer>
 
-  <!-- ========================================== -->
-  <!-- JAVASCRIPT: LÓGICA, BANCO DE DADOS E CHARTS -->
-  <!-- ========================================== -->
+  <!-- SCRIPT -->
   <script>
-    // Inicialização da Data do Dia
     document.getElementById('eval-date').value = new Date().toISOString().split('T')[0];
 
-    // BANCO DE DADOS LOCAL (localStorage)
     const DB_KEY_STUDENTS = 'isokin_students_db';
     const DB_KEY_ASSESSMENTS = 'isokin_assessments_db';
 
@@ -730,18 +708,17 @@
       localStorage.setItem(DB_KEY_ASSESSMENTS, JSON.stringify(assessments));
     }
 
-    // NAVEGAÇÃO DE ABAS
     function switchTab(tab) {
       ['evaluation', 'students', 'history'].forEach(t => {
         document.getElementById(`tab-${t}`).classList.add('hidden');
         const bDesktop = document.getElementById(`tab-btn-${t === 'evaluation' ? 'eval' : t}`);
         const bMobile = document.getElementById(`tab-btn-${t === 'evaluation' ? 'eval' : t}-mobile`);
         if (bDesktop) {
-          bDesktop.classList.remove('bg-crimson-600', 'text-white');
+          bDesktop.classList.remove('bg-brand-600', 'text-white');
           bDesktop.classList.add('text-slate-400');
         }
         if (bMobile) {
-          bMobile.classList.remove('bg-crimson-600', 'text-white');
+          bMobile.classList.remove('bg-brand-600', 'text-white');
           bMobile.classList.add('text-slate-400');
         }
       });
@@ -750,11 +727,11 @@
       const activeDesktop = document.getElementById(`tab-btn-${tab === 'evaluation' ? 'eval' : tab}`);
       const activeMobile = document.getElementById(`tab-btn-${tab === 'evaluation' ? 'eval' : tab}-mobile`);
       if (activeDesktop) {
-        activeDesktop.classList.add('bg-crimson-600', 'text-white');
+        activeDesktop.classList.add('bg-brand-600', 'text-white');
         activeDesktop.classList.remove('text-slate-400');
       }
       if (activeMobile) {
-        activeMobile.classList.add('bg-crimson-600', 'text-white');
+        activeMobile.classList.add('bg-brand-600', 'text-white');
         activeMobile.classList.remove('text-slate-400');
       }
 
@@ -766,52 +743,43 @@
       }
     }
 
-    // CÁLCULOS BIOMECÂNICOS EM TEMPO REAL
     function getVal(id) {
       const v = parseFloat(document.getElementById(id).value);
       return isNaN(v) ? 0 : v;
     }
 
     function calculateAll() {
-      // Quadríceps
       const qL = Math.max(getVal('quad-l1'), getVal('quad-l2'), getVal('quad-l3'));
       const qR = Math.max(getVal('quad-r1'), getVal('quad-r2'), getVal('quad-r3'));
       document.getElementById('quad-l-peak').innerText = `${qL.toFixed(1)} kg`;
       document.getElementById('quad-r-peak').innerText = `${qR.toFixed(1)} kg`;
 
-      // Isquiotibiais
       const hL = Math.max(getVal('ham-l1'), getVal('ham-l2'), getVal('ham-l3'));
       const hR = Math.max(getVal('ham-r1'), getVal('ham-r2'), getVal('ham-r3'));
       document.getElementById('ham-l-peak').innerText = `${hL.toFixed(1)} kg`;
       document.getElementById('ham-r-peak').innerText = `${hR.toFixed(1)} kg`;
 
-      // Tolerâncias e Limiares
       const context = document.getElementById('eval-context').value;
-      let threshold = 15; // padrão ACSM
+      let threshold = 15;
       if (context === 'acl' || context === 'hamstring_injury') threshold = 10;
       if (context === 'ewgsop2') threshold = 12;
 
-      // Assimetria Quadríceps
       const quadAsym = calculateAsymmetry(qL, qR);
       updateAsymBadge('quad-asym-badge', quadAsym, threshold);
 
-      // Assimetria Isquiotibiais
       const hamAsym = calculateAsymmetry(hL, hR);
       updateAsymBadge('ham-asym-badge', hamAsym, threshold);
 
-      // Razão I:Q
-      const ratioL = qL > 0 ? (hL / qL) : 0;
-      const ratioR = qR > 0 ? (hR / qR) : 0;
+      const ratioL = qL > 0 ? (hL / qL) * 100 : 0;
+      const ratioR = qR > 0 ? (hR / qR) * 100 : 0;
       updateRatioBadge('ratio-l-val', 'ratio-l-status', ratioL);
       updateRatioBadge('ratio-r-val', 'ratio-r-status', ratioR);
 
-      // Força Relativa (% MC)
       const weight = getVal('eval-weight');
       const maxPeak = Math.max(qL, qR, hL, hR);
-      const relForce = weight > 0 ? (maxPeak / weight) * 100 : 0;
-      document.getElementById('rel-force-val').innerText = `${relForce.toFixed(1)}%`;
+      const relForce = weight > 0 ? (maxPeak / weight) : 0;
+      document.getElementById('rel-force-val').innerText = `${relForce.toFixed(2)}`;
 
-      // Atualiza Parecer Automático
       generateClinicalSummary(qL, qR, hL, hR, quadAsym, hamAsym, ratioL, ratioR, threshold);
     }
 
@@ -820,7 +788,7 @@
       const max = Math.max(left, right);
       const min = Math.min(left, right);
       const diff = max > 0 ? ((max - min) / max) * 100 : 0;
-      const favored = left > right ? 'ME' : (right > left ? 'MD' : 'neutral');
+      const favored = left > right ? 'E' : (right > left ? 'D' : 'neutral');
       return { diff, favored };
     }
 
@@ -828,7 +796,7 @@
       const el = document.getElementById(elementId);
       const val = asymObj.diff.toFixed(1);
       if (asymObj.diff === 0) {
-        el.className = 'px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-surface-700 text-slate-400';
+        el.className = 'px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-dark-800 text-slate-400';
         el.innerText = '0.0% (Equilibrado)';
         return;
       }
@@ -836,26 +804,26 @@
         el.className = 'px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-800';
         el.innerText = `${val}% (${asymObj.favored} > - Simétrico)`;
       } else {
-        el.className = 'px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-crimson-950/80 text-crimson-400 border border-crimson-800 animate-pulse';
-        el.innerText = `${val}% (${asymObj.favored} > - Alerta de Défice)`;
+        el.className = 'px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-brand-950 text-rose-300 border border-brand-800 animate-pulse';
+        el.innerText = `${val}% (${asymObj.favored} > - Alto Risco)`;
       }
     }
 
-    function updateRatioBadge(valId, statusId, ratio) {
-      document.getElementById(valId).innerText = ratio.toFixed(2);
+    function updateRatioBadge(valId, statusId, ratioPercent) {
+      document.getElementById(valId).innerText = `${ratioPercent.toFixed(1)}%`;
       const st = document.getElementById(statusId);
-      if (ratio === 0) {
+      if (ratioPercent === 0) {
         st.innerText = 'Sem dados';
-        st.className = 'text-xs font-semibold px-2 py-0.5 rounded bg-surface-800 text-slate-400 border border-surface-700';
-      } else if (ratio < 0.55) {
-        st.innerText = 'Défice Isquios (Risco)';
-        st.className = 'text-xs font-semibold px-2 py-0.5 rounded bg-crimson-950 text-crimson-400 border border-crimson-800';
-      } else if (ratio >= 0.55 && ratio <= 0.80) {
-        st.innerText = 'Equilíbrio Funcional';
+        st.className = 'text-xs font-semibold px-2 py-0.5 rounded bg-dark-900 text-slate-400 border border-dark-700';
+      } else if (ratioPercent < 55) {
+        st.innerText = 'Défice Isquios';
+        st.className = 'text-xs font-semibold px-2 py-0.5 rounded bg-brand-950 text-rose-300 border border-brand-800';
+      } else if (ratioPercent >= 55 && ratioPercent <= 65) {
+        st.innerText = 'Ótimo (Ref)';
         st.className = 'text-xs font-semibold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800';
       } else {
-        st.innerText = 'Predomínio Posterior';
-        st.className = 'text-xs font-semibold px-2 py-0.5 rounded bg-blue-950 text-blue-400 border border-blue-800';
+        st.innerText = 'Predomínio Post';
+        st.className = 'text-xs font-semibold px-2 py-0.5 rounded bg-dark-800 text-amber-300 border border-amber-900/40';
       }
     }
 
@@ -870,20 +838,20 @@
 
       let condutas = [];
       if (qAsym.diff > threshold) {
-        condutas.push(`• <strong>Défice de Quadríceps (${qAsym.diff.toFixed(1)}% a favor do ${qAsym.favored}):</strong> Priorizar estímulos unilaterais focados no membro deficitário (ex.: Leg press unilateral, agachamento búlgaro com ênfase isométrica terminal).`);
+        condutas.push(`• <strong>Défice de Quadríceps (${qAsym.diff.toFixed(1)}% - Membro ${qAsym.favored} mais forte):</strong> Priorizar estímulos unilaterais focados no membro deficitário.`);
       }
       if (hAsym.diff > threshold) {
-        condutas.push(`• <strong>Défice de Isquiotibiais (${hAsym.diff.toFixed(1)}% a favor do ${hAsym.favored}):</strong> Inserir reforço isolado na cadeia posterior (flexão nórdica isométrica, mesa flexora unilateral).`);
+        condutas.push(`• <strong>Défice de Isquiotibiais (${hAsym.diff.toFixed(1)}% - Membro ${hAsym.favored} mais forte):</strong> Inserir reforço isolado na cadeia posterior (flexão nórdica isométrica, mesa flexora unilateral).`);
       }
-      if (rL > 0 && rL < 0.55) {
-        condutas.push(`• <strong>Relação I:Q Membro Esquerdo Baixa (${rL.toFixed(2)}):</strong> Risco aumentado para o LCA e estiramento de posteriores. Necessário elevar força excêntrica/isométrica dos flexores.`);
+      if (rL > 0 && rL < 55) {
+        condutas.push(`• <strong>Razão I:Q Lado Esquerdo Baixa (${rL.toFixed(1)}%):</strong> Risco aumentado para sobrecarga anterior do joelho.`);
       }
-      if (rR > 0 && rR < 0.55) {
-        condutas.push(`• <strong>Relação I:Q Membro Direito Baixa (${rR.toFixed(2)}):</strong> Vulnerabilidade na desaceleração mecânica do joelho.`);
+      if (rR > 0 && rR < 55) {
+        condutas.push(`• <strong>Razão I:Q Lado Direito Baixa (${rR.toFixed(1)}%):</strong> Vulnerabilidade na desaceleração excêntrica.`);
       }
 
       if (condutas.length === 0) {
-        condutas.push(`• <strong>Simetria Preservada:</strong> Força bilateral e relações agonista/antagonista dentro das faixas recomendadas pela literatura para o contexto <em>${contextName}</em>.`);
+        condutas.push(`• <strong>Simetria Preservada:</strong> Força bilateral e relações agonista/antagonista dentro das faixas recomendadas para <em>${contextName}</em>.`);
       }
 
       document.getElementById('diagnostic-text').innerHTML = `
@@ -896,7 +864,6 @@
       `;
     }
 
-    // GESTÃO DE ALUNOS
     function populateStudentSelectors() {
       const students = getStudents();
       const s1 = document.getElementById('quick-student-select');
@@ -936,16 +903,16 @@
       tbody.innerHTML = filtered.map(s => {
         const count = assessments.filter(a => a.studentId === s.id).length;
         return `
-          <tr class="hover:bg-surface-800/50 transition">
+          <tr class="hover:bg-dark-800/50 transition">
             <td class="py-3 px-4 font-bold text-white">${s.name}</td>
             <td class="py-3 px-4">${s.age || '-'} anos / ${s.gender}</td>
             <td class="py-3 px-4 font-mono">${s.weight ? s.weight + ' kg' : '-'}</td>
             <td class="py-3 px-4 capitalize">${s.modality || 'Civil'}</td>
-            <td class="py-3 px-4 font-mono"><span class="px-2 py-0.5 bg-surface-700 rounded text-slate-300 font-bold">${count}</span></td>
+            <td class="py-3 px-4 font-mono"><span class="px-2 py-0.5 bg-dark-900 border border-dark-700 rounded text-rose-300 font-bold">${count}</span></td>
             <td class="py-3 px-4 text-right space-x-2">
-              <button onclick="loadStudentToEval('${s.id}')" class="px-2.5 py-1 bg-crimson-600/80 hover:bg-crimson-600 text-white rounded text-xs transition">Avaliar</button>
-              <button onclick="viewStudentHistory('${s.id}')" class="px-2.5 py-1 bg-surface-700 hover:bg-surface-600 text-slate-200 rounded text-xs transition">Histórico</button>
-              <button onclick="deleteStudent('${s.id}')" class="text-slate-500 hover:text-crimson-400 text-xs transition">&times;</button>
+              <button onclick="loadStudentToEval('${s.id}')" class="px-2.5 py-1 bg-brand-600/80 hover:bg-brand-600 text-white rounded text-xs transition">Avaliar</button>
+              <button onclick="viewStudentHistory('${s.id}')" class="px-2.5 py-1 bg-dark-800 hover:bg-dark-750 text-slate-200 rounded text-xs transition">Histórico</button>
+              <button onclick="deleteStudent('${s.id}')" class="text-slate-500 hover:text-brand-400 text-xs transition">&times;</button>
             </td>
           </tr>
         `;
@@ -1028,7 +995,6 @@
       renderHistoryCharts(id);
     }
 
-    // SALVAMENTO DA AVALIAÇÃO ATUAL
     function saveCurrentAssessment() {
       const name = document.getElementById('eval-name').value.trim();
       if (!name) {
@@ -1066,7 +1032,7 @@
         context: document.getElementById('eval-context').value,
         quad: { l: qL, r: qR, asym: calculateAsymmetry(qL, qR).diff },
         ham: { l: hL, r: hR, asym: calculateAsymmetry(hL, hR).diff },
-        ratio: { l: qL > 0 ? hL / qL : 0, r: qR > 0 ? hR / qR : 0 },
+        ratio: { l: qL > 0 ? (hL / qL) * 100 : 0, r: qR > 0 ? (hR / qR) * 100 : 0 },
         diagnostic: document.getElementById('diagnostic-text').innerText
       };
 
@@ -1077,7 +1043,6 @@
       alert(`Avaliação de ${student.name} salva com sucesso no histórico!`);
     }
 
-    // GRÁFICOS DE EVOLUÇÃO (CHART.JS)
     let chartForceInstance = null;
     let chartAsymInstance = null;
 
@@ -1094,23 +1059,21 @@
       const quadAsyms = assessments.map(a => a.quad.asym);
       const hamAsyms = assessments.map(a => a.ham.asym);
 
-      // Render Tabela Histórica
       const tbody = document.getElementById('history-table-body');
       tbody.innerHTML = assessments.map(a => `
-        <tr class="hover:bg-surface-800 transition">
+        <tr class="hover:bg-dark-800 transition">
           <td class="py-2 px-4 text-white">${a.date}</td>
           <td class="py-2 px-4 uppercase text-slate-400">${a.modality}</td>
           <td class="py-2 px-4">${a.quad.l.toFixed(1)} / ${a.quad.r.toFixed(1)} kg</td>
           <td class="py-2 px-4">${a.ham.l.toFixed(1)} / ${a.ham.r.toFixed(1)} kg</td>
-          <td class="py-2 px-4 font-bold ${a.quad.asym > 15 ? 'text-crimson-400' : 'text-emerald-400'}">${a.quad.asym.toFixed(1)}%</td>
-          <td class="py-2 px-4">${a.ratio.l.toFixed(2)} / ${a.ratio.r.toFixed(2)}</td>
+          <td class="py-2 px-4 font-bold ${a.quad.asym > 15 ? 'text-brand-400' : 'text-emerald-400'}">${a.quad.asym.toFixed(1)}%</td>
+          <td class="py-2 px-4">${a.ratio.l.toFixed(1)}% / ${a.ratio.r.toFixed(1)}%</td>
           <td class="py-2 px-4 text-right">
-            <button onclick="deleteAssessment('${a.id}', '${studentId}')" class="text-slate-500 hover:text-crimson-400">&times;</button>
+            <button onclick="deleteAssessment('${a.id}', '${studentId}')" class="text-slate-500 hover:text-brand-400">&times;</button>
           </td>
         </tr>
       `).join('');
 
-      // Gráfico 1: Força
       const ctxForce = document.getElementById('chart-force-history').getContext('2d');
       if (chartForceInstance) chartForceInstance.destroy();
       chartForceInstance = new Chart(ctxForce, {
@@ -1121,16 +1084,16 @@
             {
               label: 'Pico Quadríceps (kg)',
               data: quadPeaks,
-              borderColor: '#3b82f6',
-              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+              borderColor: '#f59e0b',
+              backgroundColor: 'rgba(245, 158, 11, 0.15)',
               tension: 0.3,
               fill: true
             },
             {
               label: 'Pico Isquiotibiais (kg)',
               data: hamPeaks,
-              borderColor: '#ef4444',
-              backgroundColor: 'rgba(239, 68, 68, 0.1)',
+              borderColor: '#f43f5e',
+              backgroundColor: 'rgba(244, 63, 94, 0.15)',
               tension: 0.3,
               fill: true
             }
@@ -1140,16 +1103,15 @@
           responsive: true,
           maintainAspectRatio: false,
           scales: {
-            x: { grid: { color: '#232e42' }, ticks: { color: '#94a3b8' } },
-            y: { grid: { color: '#232e42' }, ticks: { color: '#94a3b8' } }
+            x: { grid: { color: '#23141d' }, ticks: { color: '#fda4af' } },
+            y: { grid: { color: '#23141d' }, ticks: { color: '#fda4af' } }
           },
           plugins: {
-            legend: { labels: { color: '#cbd5e1' } }
+            legend: { labels: { color: '#fecdd3' } }
           }
         }
       });
 
-      // Gráfico 2: Assimetria
       const ctxAsym = document.getElementById('chart-asym-history').getContext('2d');
       if (chartAsymInstance) chartAsymInstance.destroy();
       chartAsymInstance = new Chart(ctxAsym, {
@@ -1160,12 +1122,12 @@
             {
               label: 'Assimetria Quadríceps (%)',
               data: quadAsyms,
-              backgroundColor: '#3b82f6'
+              backgroundColor: '#f59e0b'
             },
             {
               label: 'Assimetria Isquiotibiais (%)',
               data: hamAsyms,
-              backgroundColor: '#ef4444'
+              backgroundColor: '#e11d48'
             }
           ]
         },
@@ -1173,11 +1135,11 @@
           responsive: true,
           maintainAspectRatio: false,
           scales: {
-            x: { grid: { color: '#232e42' }, ticks: { color: '#94a3b8' } },
-            y: { grid: { color: '#232e42' }, ticks: { color: '#94a3b8' }, max: 30 }
+            x: { grid: { color: '#23141d' }, ticks: { color: '#fda4af' } },
+            y: { grid: { color: '#23141d' }, ticks: { color: '#fda4af' }, max: 30 }
           },
           plugins: {
-            legend: { labels: { color: '#cbd5e1' } }
+            legend: { labels: { color: '#fecdd3' } }
           }
         }
       });
@@ -1190,7 +1152,6 @@
       renderHistoryCharts(studentId);
     }
 
-    // BACKUP E RESTAURAÇÃO
     function exportDataBackup() {
       const data = {
         students: getStudents(),
@@ -1227,7 +1188,6 @@
       reader.readAsText(file);
     }
 
-    // INTEGRAÇÃO COM GOOGLE AI STUDIO
     function openAiModal() {
       document.getElementById('ai-api-key').value = localStorage.getItem('isokin_gemini_key') || '';
       document.getElementById('ai-model').value = localStorage.getItem('isokin_gemini_model') || 'gemini-2.5-flash';
@@ -1252,7 +1212,7 @@
       const model = localStorage.getItem('isokin_gemini_model') || 'gemini-2.5-flash';
 
       if (!apiKey) {
-        alert('Por favor, configure sua chave do Google AI Studio no botão "AI Studio API" no topo antes de gerar.');
+        alert('Configure sua chave no botão "AI Studio API" no topo antes de gerar.');
         openAiModal();
         return;
       }
@@ -1297,8 +1257,8 @@
         if (data.candidates && data.candidates[0].content.parts[0].text) {
           const aiResponse = data.candidates[0].content.parts[0].text;
           document.getElementById('diagnostic-text').innerHTML = `
-            <div class="border-l-4 border-crimson-500 pl-3 py-1 bg-surface-800 rounded">
-              <span class="text-xs font-mono font-bold text-crimson-400 uppercase tracking-wide block mb-1">Parecer Gerado via Gemini (${model}):</span>
+            <div class="border-l-4 border-brand-500 pl-3 py-1 bg-dark-900 rounded">
+              <span class="text-xs font-mono font-bold text-brand-400 uppercase tracking-wide block mb-1">Parecer Gerado via Gemini (${model}):</span>
               <div class="text-slate-200 whitespace-pre-line text-xs sm:text-sm leading-relaxed">${aiResponse}</div>
             </div>
           `;
@@ -1313,7 +1273,6 @@
       }
     }
 
-    // Inicialização ao Carregar
     populateStudentSelectors();
     renderStudentsTable();
   </script>
