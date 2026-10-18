@@ -1,10 +1,88 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<!-- CABEÇALHO RESPONSIVO (COMPACTO NO IPHONE / COMPLETO NO PC) -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ISOKIN FORCE LAB - Bateria Neuromuscular Completa</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              400: '#fb7185',
+              500: '#f43f5e',
+              600: '#e11d48',
+              700: '#be123c',
+              800: '#9f1239',
+              900: '#881337',
+              950: '#4c0519',
+            },
+            dark: {
+              950: '#0a0608',
+              900: '#0f0a0d',
+              850: '#140c10',
+              800: '#1a1015',
+              750: '#23141d',
+              700: '#321927',
+              600: '#4a2338'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Estilos de Impressão (Laudo Clínico A4) */
+    @media print {
+      body { background-color: #ffffff !important; color: #000000 !important; font-size: 10pt; }
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      .card-print { border: 1px solid #ccc !important; background: transparent !important; color: #000 !important; }
+      .card-print * { color: #000 !important; }
+    }
+    .print-only { display: none; }
+    
+    /* Touch targets ergonômicos e remoção de spinners em campos numéricos */
+    input[type="number"], select, button {
+      min-height: 40px;
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+
+<body class="bg-dark-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-brand-600 selection:text-white">
+
+  <!-- ======================================================== -->
+  <!-- CABEÇALHO RESPONSIVO (COMPACTO NO IPHONE / COMPLETO NO PC) -->
+  <!-- ======================================================== -->
   <header class="bg-dark-900/95 border-b border-dark-700/80 sticky top-0 z-30 backdrop-blur-md px-3 sm:px-6 py-2 transition-all no-print">
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
       
-      <!-- Marca / Logo -->
+      <!-- Marca & Identidade Visual -->
       <div class="flex items-center gap-2 min-w-0">
         <img src="logo.png" onerror="this.style.display='none'; document.getElementById('fallback-logo').style.display='flex';" alt="ISOKIN Logo" class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg object-contain shadow-md border border-brand-500/40 p-0.5 bg-dark-900 shrink-0">
         
@@ -25,45 +103,45 @@
         </div>
       </div>
 
-      <!-- Abas Centrais (Apenas telas médias/grandes) -->
+      <!-- Abas Centrais Desktop / Tablet -->
       <nav class="hidden md:flex items-center gap-1 bg-dark-850 p-1 rounded-xl border border-dark-700">
-        <button onclick="switchTab('evaluation')" id="tab-btn-eval" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand-600 text-white transition">
+        <button type="button" onclick="switchTab('evaluation')" id="tab-btn-eval" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand-600 text-white transition">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
           Avaliação
         </button>
-        <button onclick="switchTab('students')" id="tab-btn-students" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition">
+        <button type="button" onclick="switchTab('students')" id="tab-btn-students" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
           Alunos
         </button>
-        <button onclick="switchTab('history')" id="tab-btn-history" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition">
+        <button type="button" onclick="switchTab('history')" id="tab-btn-history" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
           Evolução
         </button>
       </nav>
 
-      <!-- Ações à Direita -->
+      <!-- Ações Rápidas & Menu Compacto Mobile -->
       <div class="flex items-center gap-1.5 shrink-0">
-        <!-- Botão Abas Compacto (Mobile) -->
+        <!-- Ícones de Navegação no Celular (Ultra-compacto) -->
         <div class="flex md:hidden bg-dark-850 p-0.5 rounded-lg border border-dark-700">
-          <button onclick="switchTab('evaluation')" id="tab-btn-eval-mobile" title="Avaliação" class="p-1.5 rounded bg-brand-600 text-white">
+          <button type="button" onclick="switchTab('evaluation')" id="tab-btn-eval-mobile" title="Avaliação" class="p-1.5 rounded bg-brand-600 text-white">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
           </button>
-          <button onclick="switchTab('students')" id="tab-btn-students-mobile" title="Alunos" class="p-1.5 rounded text-slate-400 hover:text-white">
+          <button type="button" onclick="switchTab('students')" id="tab-btn-students-mobile" title="Alunos" class="p-1.5 rounded text-slate-400 hover:text-white">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
           </button>
-          <button onclick="switchTab('history')" id="tab-btn-history-mobile" title="Evolução" class="p-1.5 rounded text-slate-400 hover:text-white">
+          <button type="button" onclick="switchTab('history')" id="tab-btn-history-mobile" title="Evolução" class="p-1.5 rounded text-slate-400 hover:text-white">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
           </button>
         </div>
 
         <!-- Botão AI Studio -->
-        <button onclick="openAiModal()" title="Configurar API Gemini" class="flex items-center justify-center p-2 sm:px-2.5 sm:py-1.5 rounded-lg bg-dark-800 hover:bg-dark-750 border border-dark-600 text-xs font-medium text-slate-200 transition">
+        <button type="button" onclick="openAiModal()" title="Configurar API Gemini" class="flex items-center justify-center p-2 sm:px-2.5 sm:py-1.5 rounded-lg bg-dark-800 hover:bg-dark-750 border border-dark-600 text-xs font-medium text-slate-200 transition">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="hidden sm:inline ml-1.5">API</span>
         </button>
 
         <!-- Botão PDF / Laudo -->
-        <button onclick="window.print()" title="Gerar Laudo / PDF" class="flex items-center justify-center gap-1 p-2 sm:px-3 sm:py-1.5 rounded-lg bg-gradient-to-r from-brand-600 to-rose-600 hover:from-brand-500 hover:to-rose-500 text-white text-xs font-semibold shadow-md shadow-brand-950/60 transition">
+        <button type="button" onclick="window.print()" title="Gerar Laudo / PDF" class="flex items-center justify-center gap-1 p-2 sm:px-3 sm:py-1.5 rounded-lg bg-gradient-to-r from-brand-600 to-rose-600 hover:from-brand-500 hover:to-rose-500 text-white text-xs font-semibold shadow-md shadow-brand-950/60 transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
           <span class="hidden sm:inline">PDF</span>
         </button>
@@ -72,81 +150,17 @@
     </div>
   </header>
 
-<body class="bg-dark-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-brand-600 selection:text-white">
-
-  <!-- CABEÇALHO -->
-  <header class="bg-dark-900/95 border-b border-dark-700/80 sticky top-0 z-30 backdrop-blur-md px-4 lg:px-8 py-2.5 transition-all no-print">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-      
-      <div class="flex items-center justify-between w-full sm:w-auto">
-        <div class="flex items-center gap-3">
-          <!-- Logo com Fallback gracioso -->
-          <img src="logo.png" onerror="this.style.display='none'; document.getElementById('fallback-logo').style.display='flex';" alt="ISOKIN Logo" class="w-10 h-10 rounded-xl object-contain shadow-lg shadow-brand-950/60 border border-brand-500/40 p-1 bg-dark-900">
-          
-          <div id="fallback-logo" style="display:none;" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 via-brand-600 to-amber-500 items-center justify-center shadow-lg shadow-brand-950/60 border border-brand-500/40 p-1.5">
-            <svg class="w-full h-full text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2C8.5 2 6 4.5 6 7.5c0 4 6 5 6 9 0 3-2.5 5.5-6 5.5"/>
-              <circle cx="12" cy="7.5" r="1.5" fill="currentColor"/>
-              <circle cx="6" cy="22" r="1.5" fill="currentColor"/>
-            </svg>
-          </div>
-
-          <div>
-            <h1 class="text-lg font-black tracking-wider text-white flex items-center gap-1.5">
-              ISOKIN <span class="text-brand-400 text-xs font-mono font-bold px-1.5 py-0.5 rounded bg-brand-950/90 border border-brand-800">FORCE LAB</span>
-            </h1>
-            <p class="text-[10px] text-rose-300/70 font-mono tracking-tight uppercase">Bateria Neuromuscular Multiarticular</p>
-          </div>
-        </div>
-
-        <!-- Abas Mobile -->
-        <div class="flex sm:hidden gap-1 bg-dark-850 p-1 rounded-lg border border-dark-700">
-          <button type="button" onclick="switchTab('evaluation')" id="tab-btn-eval-mobile" class="px-2.5 py-1 text-xs font-semibold rounded bg-brand-600 text-white transition">Avaliar</button>
-          <button type="button" onclick="switchTab('students')" id="tab-btn-students-mobile" class="px-2.5 py-1 text-xs font-semibold rounded text-slate-400 transition">Alunos</button>
-          <button type="button" onclick="switchTab('history')" id="tab-btn-history-mobile" class="px-2.5 py-1 text-xs font-semibold rounded text-slate-400 transition">Evolução</button>
-        </div>
-      </div>
-
-      <!-- Abas Desktop / Tablet -->
-      <nav class="hidden sm:flex items-center gap-1.5 bg-dark-850 p-1.5 rounded-xl border border-dark-700">
-        <button type="button" onclick="switchTab('evaluation')" id="tab-btn-eval" class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold bg-brand-600 text-white shadow-md shadow-brand-950/50 transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-          Avaliação
-        </button>
-        <button type="button" onclick="switchTab('students')" id="tab-btn-students" class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-          Alunos & Pacientes
-        </button>
-        <button type="button" onclick="switchTab('history')" id="tab-btn-history" class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
-          Evolução Periódica
-        </button>
-      </nav>
-
-      <!-- Ações Rápidas -->
-      <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-        <button type="button" onclick="openAiModal()" class="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-dark-800 hover:bg-dark-750 border border-dark-600 text-xs font-medium text-slate-200 transition">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          AI Studio API
-        </button>
-        <button type="button" onclick="window.print()" class="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-gradient-to-r from-brand-600 to-rose-600 hover:from-brand-500 hover:to-rose-500 text-white text-xs font-semibold shadow-lg shadow-brand-950/60 transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-          <span class="hidden md:inline">Gerar Laudo / PDF</span>
-        </button>
-      </div>
-
-    </div>
-  </header>
-
-  <!-- CORPO PRINCIPAL -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+  <!-- ======================================================== -->
+  <!-- CORPO PRINCIPAL DO SISTEMA                               -->
+  <!-- ======================================================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 lg:p-8 space-y-6">
 
     <!-- ========================================== -->
-    <!-- ABA 1: AVALIAÇÃO                           -->
+    <!-- ABA 1: AVALIAÇÃO NEUROMUSCULAR             -->
     <!-- ========================================== -->
     <div id="tab-evaluation" class="space-y-6">
       
-      <!-- Cartão: Identificação & Contexto -->
+      <!-- Identificação & Contextualização -->
       <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-4 sm:p-6 shadow-xl">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-dark-700/70 gap-3">
           <div>
@@ -254,13 +268,13 @@
         </div>
         <div class="flex flex-wrap gap-1.5 text-xs">
           <button type="button" onclick="filterJoint('all')" id="filter-all" class="px-3 py-1.5 rounded-lg bg-brand-600 text-white font-semibold transition">Todas</button>
-          <button type="button" onclick="filterJoint('knee')" id="filter-knee" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Coxa (I:Q)</button>
+          <button type="button" onclick="filterJoint('knee')" id="filter-knee" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Joelho (I:Q)</button>
           <button type="button" onclick="filterJoint('hip')" id="filter-hip" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Quadril (Ad:Ab)</button>
-          <button type="button" onclick="filterJoint('shoulder')" id="filter-shoulder" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Ombro (Rot Ext:Rot Int)</button>
-          <button type="button" onclick="filterJoint('elbow')" id="filter-elbow" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Braço (Bíceps:Tríceps)</button>
-          <button type="button" onclick="filterJoint('horizontal')" id="filter-horizontal" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Tronco (EMP:PUX)</button>
-          <button type="button" onclick="filterJoint('vertical')" id="filter-vertical" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Ombro (Des:Pux)</button>
-          <button type="button" onclick="filterJoint('core')" id="filter-core" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Core / Pallof</button>
+          <button type="button" onclick="filterJoint('shoulder')" id="filter-shoulder" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Ombro (RE:RI)</button>
+          <button type="button" onclick="filterJoint('elbow')" id="filter-elbow" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Cotovelo (Bíceps:Tríceps)</button>
+          <button type="button" onclick="filterJoint('horizontal')" id="filter-horizontal" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Supino vs Remada</button>
+          <button type="button" onclick="filterJoint('vertical')" id="filter-vertical" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Desenv. vs Puxador</button>
+          <button type="button" onclick="filterJoint('core')" id="filter-core" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium transition">Tronco / Pallof</button>
         </div>
       </div>
 
@@ -469,7 +483,6 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <!-- RE -->
           <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-4 sm:p-5 shadow-xl relative overflow-hidden">
             <div class="absolute top-0 left-0 w-1.5 h-full bg-purple-500"></div>
             <div class="flex items-center justify-between mb-4 pl-2">
@@ -511,7 +524,6 @@
             </div>
           </div>
 
-          <!-- RI -->
           <div class="bg-dark-850 rounded-2xl border border-dark-700/80 p-4 sm:p-5 shadow-xl relative overflow-hidden">
             <div class="absolute top-0 left-0 w-1.5 h-full bg-pink-500"></div>
             <div class="flex items-center justify-between mb-4 pl-2">
@@ -1040,7 +1052,11 @@
 
   </main>
 
-  <!-- MODAL: NOVO ALUNO -->
+  <!-- ======================================================== -->
+  <!-- MODAIS DO SISTEMA                                        -->
+  <!-- ======================================================== -->
+
+  <!-- Modal: Novo Aluno -->
   <div id="student-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-dark-850 border border-dark-700 max-w-md w-full rounded-2xl p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between pb-3 border-b border-dark-700">
@@ -1098,7 +1114,7 @@
     </div>
   </div>
 
-  <!-- MODAL: GOOGLE AI STUDIO -->
+  <!-- Modal: Google AI Studio (Gemini) -->
   <div id="ai-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-dark-850 border border-dark-700 max-w-md w-full rounded-2xl p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between pb-3 border-b border-dark-700">
@@ -1131,10 +1147,12 @@
   </div>
 
   <footer class="mt-auto border-t border-dark-700/60 py-4 px-4 text-center text-xs text-slate-500 font-mono no-print">
-    ISOKIN SESSION LAB &bull; Bateria Neuromuscular Multiarticular
+    ISOKIN FORCE LAB &bull; Bateria Neuromuscular Multiarticular
   </footer>
 
-  <!-- SCRIPT ROBUSTO (FILTRO DE ARTICULAÇÃO E CÁLCULO SEGURO) -->
+  <!-- ======================================================== -->
+  <!-- JAVASCRIPT: LÓGICA, CALCULOS, BANCO E GEMINI AI STUDIO   -->
+  <!-- ======================================================== -->
   <script>
     document.getElementById('eval-date').value = new Date().toISOString().split('T')[0];
 
@@ -1174,6 +1192,7 @@
       });
     }
 
+    // NAVEGAÇÃO ENTRE ABAS
     function switchTab(tab) {
       ['evaluation', 'students', 'history'].forEach(t => {
         const tabEl = document.getElementById(`tab-${t}`);
@@ -1199,6 +1218,7 @@
       }
     }
 
+    // FUNÇÕES DE LEITURA E CÁLCULO SEGURO
     function getVal(id) {
       const el = document.getElementById(id);
       if (!el) return 0;
@@ -1238,6 +1258,7 @@
       if (el) el.innerText = text;
     }
 
+    // RECÁLCULO SIMULTÂNEO EM TEMPO REAL
     function calculateAll() {
       // 1. JOELHO
       const hL = Math.max(getVal('ham-l1'), getVal('ham-l2'), getVal('ham-l3'));
@@ -1311,13 +1332,13 @@
       setSafeText('pallof-l-peak', `${palL.toFixed(1)} kg`);
       setSafeText('pallof-r-peak', `${palR.toFixed(1)} kg`);
 
-      // LIMITES DE TOLERÂNCIA
+      // Limites de corte baseados em evidência científica
       const context = document.getElementById('eval-context') ? document.getElementById('eval-context').value : 'acsm';
       let threshold = 15;
       if (context === 'acl' || context === 'hamstring_injury') threshold = 10;
       if (context === 'ewgsop2') threshold = 12;
 
-      // ATUALIZAÇÃO DOS BADGES
+      // Atualização dos Badges Visuais
       updateBadge('ham-asym-badge', calculateAsymmetry(hL, hR), threshold);
       updateBadge('quad-asym-badge', calculateAsymmetry(qL, qR), threshold);
       updateBadge('add-asym-badge', calculateAsymmetry(addL, addR), threshold);
@@ -1332,7 +1353,7 @@
       updateBadge('pull-asym-badge', calculateAsymmetry(pullL, pullR), threshold);
       updateBadge('pallof-asym-badge', calculateAsymmetry(palL, palR), threshold);
 
-      // RAZÕES
+      // Razões Funcionais
       const ratioQL = qL > 0 ? (hL / qL) * 100 : 0;
       const ratioQR = qR > 0 ? (hR / qR) * 100 : 0;
       const ratioQMean = (ratioQL > 0 && ratioQR > 0) ? (ratioQL + ratioQR) / 2 : (ratioQL || ratioQR);
@@ -1405,6 +1426,7 @@
       }
     }
 
+    // GESTÃO DO BANCO DE ALUNOS
     function populateStudentSelectors() {
       const students = getStudents();
       const s1 = document.getElementById('quick-student-select');
@@ -1706,7 +1728,7 @@
       closeAiModal();
     }
 
-    // CHAMADA ROBUSTA À API GEMINI COM FORMATAÇÃO LIMPA
+    // CHAMADA ROBUSTA À API GEMINI COM FORMATAÇÃO LIMPA (SEM LATEX)
     async function generateAiReport() {
       let apiKey = (localStorage.getItem('isokin_gemini_key') || '').trim();
       let model = localStorage.getItem('isokin_gemini_model') || 'gemini-3.8-flash';
@@ -1756,7 +1778,7 @@
         }
       };
 
-      const promptText = `Você é um especialista em biomecânica e avaliação neuromuscular. Analise os dados da bateria abaixo e elabore um parecer clínico direto, legível, profissional e de fácil compreensão. REGRAS OBRIGATÓRIAS DE FORMATAÇÃO: 1. NUNCA use LaTeX, cifrões ($), barras ou fórmulas matemáticas (escreva sempre texto limpo como "32 kg", "40%", "graus"). 2. NÃO use tabelas Markdown (use tópicos claros e diretos com marcadores). 3. Use parágrafos objetivos e destaques em negrito simples:\n\n${JSON.stringify(payload, null, 2)}`;
+      const promptText = `Você é um especialista em biomecânica e avaliação neuromuscular. Analise os dados da bateria abaixo e elabore um parecer clínico direto, legível e profissional. REGRAS OBRIGATÓRIAS DE FORMATAÇÃO: 1. NUNCA use LaTeX, cifrões ($), barras ou fórmulas matemáticas (escreva sempre texto limpo como "32 kg", "40%", "graus"). 2. NÃO use tabelas Markdown (use tópicos claros e diretos com marcadores). 3. Use parágrafos objetivos e destaques em negrito simples:\n\n${JSON.stringify(payload, null, 2)}`;
 
       try {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
@@ -1804,7 +1826,7 @@
       }
     }
 
-    // Inicialização segura
+    // Inicialização da aplicação
     populateStudentSelectors();
     renderStudentsTable();
     calculateAll();
