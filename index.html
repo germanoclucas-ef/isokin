@@ -73,11 +73,11 @@
 
 <body class="bg-dark-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-brand-600 selection:text-white">
 
-  <!-- CABEÇALHO RESPONSIVO COM ABA DIRETA DE 1RM & REPETIÇÕES -->
+  <!-- CABEÇALHO RESPONSIVO -->
   <header class="bg-dark-900/95 border-b border-dark-700/80 sticky top-0 z-30 backdrop-blur-md px-3 sm:px-6 py-2 transition-all no-print">
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
       
-      <!-- Marca / Logótipo -->
+      <!-- Marca / Logo -->
       <div class="flex items-center gap-2 min-w-0">
         <img src="logo.png" onerror="this.style.display='none'; document.getElementById('fallback-logo').style.display='flex';" alt="ISOKIN Logo" class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg object-contain shadow-md border border-brand-500/40 p-0.5 bg-dark-900 shrink-0">
         
@@ -98,7 +98,7 @@
         </div>
       </div>
 
-      <!-- Abas Centrais (Ecrãs Médios e Grandes) -->
+      <!-- Abas Centrais (Desktop) -->
       <nav class="hidden md:flex items-center gap-1 bg-dark-850 p-1 rounded-xl border border-dark-700">
         <button onclick="switchTab('evaluation')" id="tab-btn-eval" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand-600 text-white transition">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
@@ -120,7 +120,7 @@
 
       <!-- Ações à Direita -->
       <div class="flex items-center gap-1.5 shrink-0">
-        <!-- Navegação Compacta (Telemóvel) -->
+        <!-- Navegação Mobile -->
         <div class="flex md:hidden bg-dark-850 p-0.5 rounded-lg border border-dark-700">
           <button onclick="switchTab('evaluation')" id="tab-btn-eval-mobile" title="Avaliação Isométrica" class="p-1.5 rounded bg-brand-600 text-white">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
@@ -1155,10 +1155,8 @@
     ISOKIN FORCE LAB &bull; Bateria Neuromuscular Multiarticular & 1RM
   </footer>
 
-  <!-- JAVASCRIPT PRINCIPAL -->
+  <!-- JAVASCRIPT PRINCIPAL RESILIENTE -->
   <script>
-    document.getElementById('eval-date').value = new Date().toISOString().split('T')[0];
-
     const DB_KEY_STUDENTS = 'isokin_students_db';
     const DB_KEY_ASSESSMENTS = 'isokin_assessments_db';
     const DB_KEY_ONERM = 'isokin_onerm_db';
@@ -1169,6 +1167,47 @@
     function saveAssessments(a) { localStorage.setItem(DB_KEY_ASSESSMENTS, JSON.stringify(a)); }
     function getOneRmDb() { return JSON.parse(localStorage.getItem(DB_KEY_ONERM) || '[]'); }
     function saveOneRmDb(db) { localStorage.setItem(DB_KEY_ONERM, JSON.stringify(db)); }
+
+    function getVal(id) {
+      const el = document.getElementById(id);
+      if (!el) return 0;
+      const v = parseFloat(el.value);
+      return isNaN(v) ? 0 : v;
+    }
+
+    function switchTab(tab) {
+      const tabs = ['evaluation', 'onerm', 'students', 'history'];
+      tabs.forEach(t => {
+        const target = document.getElementById(`tab-${t}`);
+        if (target) target.classList.add('hidden');
+        const bDesktop = document.getElementById(`tab-btn-${t === 'evaluation' ? 'eval' : t}`);
+        const bMobile = document.getElementById(`tab-btn-${t === 'evaluation' ? 'eval' : t}-mobile`);
+        if (bDesktop) { bDesktop.classList.remove('bg-brand-600', 'text-white'); bDesktop.classList.add('text-slate-400'); }
+        if (bMobile) { bMobile.classList.remove('bg-brand-600', 'text-white'); bMobile.classList.add('text-slate-400'); }
+      });
+
+      const activeTab = document.getElementById(`tab-${tab}`);
+      if (activeTab) activeTab.classList.remove('hidden');
+
+      const activeDesktop = document.getElementById(`tab-btn-${tab === 'evaluation' ? 'eval' : tab}`);
+      const activeMobile = document.getElementById(`tab-btn-${tab === 'evaluation' ? 'eval' : tab}-mobile`);
+      if (activeDesktop) { activeDesktop.classList.add('bg-brand-600', 'text-white'); activeDesktop.classList.remove('text-slate-400'); }
+      if (activeMobile) { activeMobile.classList.add('bg-brand-600', 'text-white'); activeMobile.classList.remove('text-slate-400'); }
+
+      if (tab === 'students') renderStudentsTable();
+      if (tab === 'onerm') {
+        const currentWeight = getVal('eval-weight');
+        const bwInput = document.getElementById('onerm-bodyweight');
+        if (bwInput && currentWeight > 0) bwInput.value = currentWeight;
+        calculateOneRm();
+        renderOneRmHistory();
+      }
+      if (tab === 'history') {
+        populateStudentSelectors();
+        const currentSel = document.getElementById('history-student-select');
+        if (currentSel && currentSel.value) renderHistoryCharts(currentSel.value);
+      }
+    }
 
     function filterJoint(joint) {
       const sections = ['knee', 'hip', 'shoulder', 'elbow', 'horizontal', 'core'];
@@ -1193,45 +1232,6 @@
           el.classList.add('hidden');
         }
       });
-    }
-
-    function switchTab(tab) {
-      ['evaluation', 'onerm', 'students', 'history'].forEach(t => {
-        const target = document.getElementById(`tab-${t}`);
-        if (target) target.classList.add('hidden');
-        const bDesktop = document.getElementById(`tab-btn-${t === 'evaluation' ? 'eval' : t}`);
-        const bMobile = document.getElementById(`tab-btn-${t === 'evaluation' ? 'eval' : t}-mobile`);
-        if (bDesktop) { bDesktop.classList.remove('bg-brand-600', 'text-white'); bDesktop.classList.add('text-slate-400'); }
-        if (bMobile) { bMobile.classList.remove('bg-brand-600', 'text-white'); bMobile.classList.add('text-slate-400'); }
-      });
-
-      const activeTab = document.getElementById(`tab-${tab}`);
-      if (activeTab) activeTab.classList.remove('hidden');
-
-      const activeDesktop = document.getElementById(`tab-btn-${tab === 'evaluation' ? 'eval' : tab}`);
-      const activeMobile = document.getElementById(`tab-btn-${tab === 'evaluation' ? 'eval' : tab}-mobile`);
-      if (activeDesktop) { activeDesktop.classList.add('bg-brand-600', 'text-white'); activeDesktop.classList.remove('text-slate-400'); }
-      if (activeMobile) { activeMobile.classList.add('bg-brand-600', 'text-white'); activeMobile.classList.remove('text-slate-400'); }
-
-      if (tab === 'students') renderStudentsTable();
-      if (tab === 'onerm') {
-        const currentWeight = getVal('eval-weight');
-        if (currentWeight > 0) document.getElementById('onerm-bodyweight').value = currentWeight;
-        calculateOneRm();
-        renderOneRmHistory();
-      }
-      if (tab === 'history') {
-        populateStudentSelectors();
-        const currentSel = document.getElementById('history-student-select').value;
-        if (currentSel) renderHistoryCharts(currentSel);
-      }
-    }
-
-    function getVal(id) {
-      const el = document.getElementById(id);
-      if (!el) return 0;
-      const v = parseFloat(el.value);
-      return isNaN(v) ? 0 : v;
     }
 
     function calculateAsymmetry(left, right) {
@@ -1264,60 +1264,83 @@
     function calculateAll() {
       const hL = Math.max(getVal('ham-l1'), getVal('ham-l2'), getVal('ham-l3'));
       const hR = Math.max(getVal('ham-r1'), getVal('ham-r2'), getVal('ham-r3'));
-      document.getElementById('ham-l-peak').innerText = `${hL.toFixed(1)} kg`;
-      document.getElementById('ham-r-peak').innerText = `${hR.toFixed(1)} kg`;
+      const elHamL = document.getElementById('ham-l-peak');
+      const elHamR = document.getElementById('ham-r-peak');
+      if (elHamL) elHamL.innerText = `${hL.toFixed(1)} kg`;
+      if (elHamR) elHamR.innerText = `${hR.toFixed(1)} kg`;
 
       const qL = Math.max(getVal('quad-l1'), getVal('quad-l2'), getVal('quad-l3'));
       const qR = Math.max(getVal('quad-r1'), getVal('quad-r2'), getVal('quad-r3'));
-      document.getElementById('quad-l-peak').innerText = `${qL.toFixed(1)} kg`;
-      document.getElementById('quad-r-peak').innerText = `${qR.toFixed(1)} kg`;
+      const elQuadL = document.getElementById('quad-l-peak');
+      const elQuadR = document.getElementById('quad-r-peak');
+      if (elQuadL) elQuadL.innerText = `${qL.toFixed(1)} kg`;
+      if (elQuadR) elQuadR.innerText = `${qR.toFixed(1)} kg`;
 
       const addL = Math.max(getVal('add-l1'), getVal('add-l2'), getVal('add-l3'));
       const addR = Math.max(getVal('add-r1'), getVal('add-r2'), getVal('add-r3'));
-      document.getElementById('add-l-peak').innerText = `${addL.toFixed(1)} kg`;
-      document.getElementById('add-r-peak').innerText = `${addR.toFixed(1)} kg`;
+      const elAddL = document.getElementById('add-l-peak');
+      const elAddR = document.getElementById('add-r-peak');
+      if (elAddL) elAddL.innerText = `${addL.toFixed(1)} kg`;
+      if (elAddR) elAddR.innerText = `${addR.toFixed(1)} kg`;
 
       const abdL = Math.max(getVal('abd-l1'), getVal('abd-l2'), getVal('abd-l3'));
       const abdR = Math.max(getVal('abd-r1'), getVal('abd-r2'), getVal('abd-r3'));
-      document.getElementById('abd-l-peak').innerText = `${abdL.toFixed(1)} kg`;
-      document.getElementById('abd-r-peak').innerText = `${abdR.toFixed(1)} kg`;
+      const elAbdL = document.getElementById('abd-l-peak');
+      const elAbdR = document.getElementById('abd-r-peak');
+      if (elAbdL) elAbdL.innerText = `${abdL.toFixed(1)} kg`;
+      if (elAbdR) elAbdR.innerText = `${abdR.toFixed(1)} kg`;
 
       const erL = Math.max(getVal('er-l1'), getVal('er-l2'), getVal('er-l3'));
       const erR = Math.max(getVal('er-r1'), getVal('er-r2'), getVal('er-r3'));
-      document.getElementById('er-l-peak').innerText = `${erL.toFixed(1)} kg`;
-      document.getElementById('er-r-peak').innerText = `${erR.toFixed(1)} kg`;
+      const elErL = document.getElementById('er-l-peak');
+      const elErR = document.getElementById('er-r-peak');
+      if (elErL) elErL.innerText = `${erL.toFixed(1)} kg`;
+      if (elErR) elErR.innerText = `${erR.toFixed(1)} kg`;
 
       const irL = Math.max(getVal('ir-l1'), getVal('ir-l2'), getVal('ir-l3'));
       const irR = Math.max(getVal('ir-r1'), getVal('ir-r2'), getVal('ir-r3'));
-      document.getElementById('ir-l-peak').innerText = `${irL.toFixed(1)} kg`;
-      document.getElementById('ir-r-peak').innerText = `${irR.toFixed(1)} kg`;
+      const elIrL = document.getElementById('ir-l-peak');
+      const elIrR = document.getElementById('ir-r-peak');
+      if (elIrL) elIrL.innerText = `${irL.toFixed(1)} kg`;
+      if (elIrR) elIrR.innerText = `${irR.toFixed(1)} kg`;
 
       const bicL = Math.max(getVal('biceps-l1'), getVal('biceps-l2'), getVal('biceps-l3'));
       const bicR = Math.max(getVal('biceps-r1'), getVal('biceps-r2'), getVal('biceps-r3'));
-      document.getElementById('biceps-l-peak').innerText = `${bicL.toFixed(1)} kg`;
-      document.getElementById('biceps-r-peak').innerText = `${bicR.toFixed(1)} kg`;
+      const elBicL = document.getElementById('biceps-l-peak');
+      const elBicR = document.getElementById('biceps-r-peak');
+      if (elBicL) elBicL.innerText = `${bicL.toFixed(1)} kg`;
+      if (elBicR) elBicR.innerText = `${bicR.toFixed(1)} kg`;
 
       const triL = Math.max(getVal('triceps-l1'), getVal('triceps-l2'), getVal('triceps-l3'));
       const triR = Math.max(getVal('triceps-r1'), getVal('triceps-r2'), getVal('triceps-r3'));
-      document.getElementById('triceps-l-peak').innerText = `${triL.toFixed(1)} kg`;
-      document.getElementById('triceps-r-peak').innerText = `${triR.toFixed(1)} kg`;
+      const elTriL = document.getElementById('triceps-l-peak');
+      const elTriR = document.getElementById('triceps-r-peak');
+      if (elTriL) elTriL.innerText = `${triL.toFixed(1)} kg`;
+      if (elTriR) elTriR.innerText = `${triR.toFixed(1)} kg`;
 
       const pressL = Math.max(getVal('press-l1'), getVal('press-l2'), getVal('press-l3'));
       const pressR = Math.max(getVal('press-r1'), getVal('press-r2'), getVal('press-r3'));
-      document.getElementById('press-l-peak').innerText = `${pressL.toFixed(1)} kg`;
-      document.getElementById('press-r-peak').innerText = `${pressR.toFixed(1)} kg`;
+      const elPressL = document.getElementById('press-l-peak');
+      const elPressR = document.getElementById('press-r-peak');
+      if (elPressL) elPressL.innerText = `${pressL.toFixed(1)} kg`;
+      if (elPressR) elPressR.innerText = `${pressR.toFixed(1)} kg`;
 
       const rowL = Math.max(getVal('row-l1'), getVal('row-l2'), getVal('row-l3'));
       const rowR = Math.max(getVal('row-r1'), getVal('row-r2'), getVal('row-r3'));
-      document.getElementById('row-l-peak').innerText = `${rowL.toFixed(1)} kg`;
-      document.getElementById('row-r-peak').innerText = `${rowR.toFixed(1)} kg`;
+      const elRowL = document.getElementById('row-l-peak');
+      const elRowR = document.getElementById('row-r-peak');
+      if (elRowL) elRowL.innerText = `${rowL.toFixed(1)} kg`;
+      if (elRowR) elRowR.innerText = `${rowR.toFixed(1)} kg`;
 
       const palL = Math.max(getVal('pallof-l1'), getVal('pallof-l2'), getVal('pallof-l3'));
       const palR = Math.max(getVal('pallof-r1'), getVal('pallof-r2'), getVal('pallof-r3'));
-      document.getElementById('pallof-l-peak').innerText = `${palL.toFixed(1)} kg`;
-      document.getElementById('pallof-r-peak').innerText = `${palR.toFixed(1)} kg`;
+      const elPalL = document.getElementById('pallof-l-peak');
+      const elPalR = document.getElementById('pallof-r-peak');
+      if (elPalL) elPalL.innerText = `${palL.toFixed(1)} kg`;
+      if (elPalR) elPalR.innerText = `${palR.toFixed(1)} kg`;
 
-      const context = document.getElementById('eval-context').value;
+      const contextEl = document.getElementById('eval-context');
+      const context = contextEl ? contextEl.value : 'acsm';
       let threshold = 15;
       if (context === 'acl' || context === 'hamstring_injury') threshold = 10;
 
@@ -1336,12 +1359,677 @@
       const ratioQL = qL > 0 ? (hL / qL) * 100 : 0;
       const ratioQR = qR > 0 ? (hR / qR) * 100 : 0;
       const ratioQMean = (ratioQL > 0 && ratioQR > 0) ? (ratioQL + ratioQR) / 2 : (ratioQL || ratioQR);
-      document.getElementById('knee-summary-badge').innerText = `I:Q Médio: ${ratioQMean.toFixed(1)}%`;
+      const bKnee = document.getElementById('knee-summary-badge');
+      if (bKnee) bKnee.innerText = `I:Q Médio: ${ratioQMean.toFixed(1)}%`;
 
       const ratioHipL = abdL > 0 ? (addL / abdL) : 0;
       const ratioHipR = abdR > 0 ? (addR / abdR) : 0;
       const ratioHipMean = (ratioHipL > 0 && ratioHipR > 0) ? (ratioHipL + ratioHipR) / 2 : (ratioHipL || ratioHipR);
-      document.getElementById('hip-summary-badge').innerText = `Ad:Ab Médio: ${ratioHipMean.toFixed(2)}`;
+      const bHip = document.getElementById('hip-summary-badge');
+      if (bHip) bHip.innerText = `Ad:Ab Médio: ${ratioHipMean.toFixed(2)}`;
 
       const ratioShL = irL > 0 ? (erL / irL) * 100 : 0;
-      const ratioShR = irR > 0 ? (erR / irR) * 100 :
+      const ratioShR = irR > 0 ? (erR / irR) * 100 : 0;
+      const ratioShMean = (ratioShL > 0 && ratioShR > 0) ? (ratioShL + ratioShR) / 2 : (ratioShL || ratioShR);
+      const bSh = document.getElementById('shoulder-summary-badge');
+      if (bSh) bSh.innerText = `RE:RI Médio: ${ratioShMean.toFixed(1)}%`;
+
+      const bicPeak = Math.max(bicL, bicR);
+      const triPeak = Math.max(triL, triR);
+      const ratioElbow = triPeak > 0 ? (bicPeak / triPeak) : 0;
+      const bElbow = document.getElementById('elbow-summary-badge');
+      if (bElbow) bElbow.innerText = `Flex:Ext: ${ratioElbow.toFixed(2)}`;
+
+      const pressPeak = Math.max(pressL, pressR);
+      const rowPeak = Math.max(rowL, rowR);
+      const ratioHoriz = pressPeak > 0 ? (rowPeak / pressPeak) : 0;
+      const bHoriz = document.getElementById('horizontal-summary-badge');
+      if (bHoriz) bHoriz.innerText = `Remada:Supino: ${ratioHoriz.toFixed(2)}`;
+
+      const palAsym = calculateAsymmetry(palL, palR);
+      const bCore = document.getElementById('core-summary-badge');
+      if (bCore) bCore.innerText = `Défice Pallof: ${palAsym.diff.toFixed(1)}%`;
+
+      generateMultiSummary(threshold);
+    }
+
+    function generateMultiSummary(threshold) {
+      let alerts = [];
+      const qA = calculateAsymmetry(Math.max(getVal('quad-l1'), getVal('quad-l2'), getVal('quad-l3')), Math.max(getVal('quad-r1'), getVal('quad-r2'), getVal('quad-r3')));
+      const hA = calculateAsymmetry(Math.max(getVal('ham-l1'), getVal('ham-l2'), getVal('ham-l3')), Math.max(getVal('ham-r1'), getVal('ham-r2'), getVal('ham-r3')));
+      const addA = calculateAsymmetry(Math.max(getVal('add-l1'), getVal('add-l2'), getVal('add-l3')), Math.max(getVal('add-r1'), getVal('add-r2'), getVal('add-r3')));
+      const erA = calculateAsymmetry(Math.max(getVal('er-l1'), getVal('er-l2'), getVal('er-l3')), Math.max(getVal('er-r1'), getVal('er-r2'), getVal('er-r3')));
+      const palA = calculateAsymmetry(Math.max(getVal('pallof-l1'), getVal('pallof-l2'), getVal('pallof-l3')), Math.max(getVal('pallof-r1'), getVal('pallof-r2'), getVal('pallof-r3')));
+
+      if (qA.diff > threshold) alerts.push(`• <strong>Quadríceps:</strong> Assimetria de ${qA.diff.toFixed(1)}% (${qA.favored} mais forte).`);
+      if (hA.diff > threshold) alerts.push(`• <strong>Isquiotibiais:</strong> Défice bilateral de ${hA.diff.toFixed(1)}% (${hA.favored} >).`);
+      if (addA.diff > threshold) alerts.push(`• <strong>Adutores:</strong> Desequilíbrio de ${addA.diff.toFixed(1)}%.`);
+      if (erA.diff > threshold) alerts.push(`• <strong>Manguito Rotador:</strong> Assimetria de RE de ${erA.diff.toFixed(1)}%.`);
+      if (palA.diff > threshold) alerts.push(`• <strong>Core / Pallof:</strong> Défice anti-rotacional de ${palA.diff.toFixed(1)}%.`);
+
+      const diagEl = document.getElementById('diagnostic-text');
+      if (!diagEl) return;
+      if (alerts.length === 0) {
+        diagEl.innerHTML = `<p class="text-emerald-400 font-medium">✓ Testes isométricos dentro dos limiares de segurança estipulados (Tolerância máxima: ${threshold}%).</p>`;
+      } else {
+        diagEl.innerHTML = `
+          <div class="space-y-1.5">
+            <span class="text-rose-400 font-bold block mb-1">Pontos de Atenção & Assimetrias:</span>
+            ${alerts.join('<br>')}
+          </div>
+        `;
+      }
+    }
+
+    function calculateOneRm() {
+      const load = getVal('onerm-load');
+      const reps = getVal('onerm-reps');
+      const bw = getVal('onerm-bodyweight') || getVal('eval-weight');
+
+      const elPeak = document.getElementById('onerm-result-peak');
+      const elBrz = document.getElementById('onerm-brzycki');
+      const elEpl = document.getElementById('onerm-epley');
+      const elRel = document.getElementById('onerm-result-rel');
+      const elRelClass = document.getElementById('onerm-rel-class');
+
+      if (load <= 0 || reps <= 0) {
+        if (elPeak) elPeak.innerText = '0.0';
+        if (elBrz) elBrz.innerText = '0.0 kg';
+        if (elEpl) elEpl.innerText = '0.0 kg';
+        if (elRel) elRel.innerText = '0.00';
+        if (elRelClass) elRelClass.innerText = 'Preencha carga e repetições';
+        updateZoneLoads(0);
+        return 0;
+      }
+
+      const brz = reps === 1 ? load : load / (1.0278 - (0.0278 * reps));
+      const epl = reps === 1 ? load : load * (1 + (0.0333 * reps));
+      const mean1RM = (brz + epl) / 2;
+
+      if (elPeak) elPeak.innerText = mean1RM.toFixed(1);
+      if (elBrz) elBrz.innerText = `${brz.toFixed(1)} kg`;
+      if (elEpl) elEpl.innerText = `${epl.toFixed(1)} kg`;
+
+      if (bw > 0) {
+        const rel = mean1RM / bw;
+        if (elRel) elRel.innerText = rel.toFixed(2);
+        let classification = 'Intermediário';
+        if (rel < 0.8) classification = 'Iniciante / Abaixo do Peso Corporal';
+        else if (rel < 1.2) classification = 'Intermediário / Equilibrado';
+        else if (rel < 1.6) classification = 'Avançado';
+        else classification = 'Elite / Força Alta';
+        if (elRelClass) elRelClass.innerText = `Classificação: ${classification}`;
+      } else {
+        if (elRel) elRel.innerText = '0.00';
+        if (elRelClass) elRelClass.innerText = 'Massa corporal não informada';
+      }
+
+      updateZoneLoads(mean1RM);
+      return mean1RM;
+    }
+
+    function updateZoneLoads(oneRm) {
+      const z90 = document.getElementById('zone-load-90');
+      const z85 = document.getElementById('zone-load-85');
+      const z75 = document.getElementById('zone-load-75');
+      const z65 = document.getElementById('zone-load-65');
+      const z50 = document.getElementById('zone-load-50');
+
+      if (z90) z90.innerText = `${(oneRm * 0.90).toFixed(1)} kg`;
+      if (z85) z85.innerText = `${(oneRm * 0.85).toFixed(1)} kg`;
+      if (z75) z75.innerText = `${(oneRm * 0.75).toFixed(1)} a ${(oneRm * 0.80).toFixed(1)} kg`;
+      if (z65) z65.innerText = `${(oneRm * 0.60).toFixed(1)} a ${(oneRm * 0.70).toFixed(1)} kg`;
+      if (z50) z50.innerText = `${(oneRm * 0.40).toFixed(1)} a ${(oneRm * 0.55).toFixed(1)} kg`;
+    }
+
+    function saveOneRmEntry() {
+      const selStudent = document.getElementById('quick-student-select');
+      const studentId = selStudent ? selStudent.value : '';
+      const nameInput = document.getElementById('eval-name');
+      const studentName = nameInput ? nameInput.value.trim() : '';
+      const exSelect = document.getElementById('onerm-exercise');
+      const exercise = exSelect ? exSelect.value : 'Exercício';
+      const load = getVal('onerm-load');
+      const reps = getVal('onerm-reps');
+      const estimated1RM = calculateOneRm();
+
+      if (load <= 0 || reps <= 0) {
+        alert('Preencha uma carga e repetições válidas.');
+        return;
+      }
+
+      const bw = getVal('onerm-bodyweight') || getVal('eval-weight');
+      const rel = bw > 0 ? (estimated1RM / bw).toFixed(2) : '-';
+      const dateEl = document.getElementById('eval-date');
+
+      const entry = {
+        id: '1rm_' + Date.now(),
+        studentId: studentId || 'avulso',
+        studentName: studentName || 'Aluno Avulso',
+        date: dateEl ? dateEl.value : new Date().toISOString().split('T')[0],
+        exercise,
+        load,
+        reps,
+        estimated1RM: estimated1RM.toFixed(1),
+        relativeStrength: rel
+      };
+
+      let db = getOneRmDb();
+      db.unshift(entry);
+      saveOneRmDb(db);
+
+      alert(`Teste de 1RM salvo com sucesso!`);
+      renderOneRmHistory();
+    }
+
+    function renderOneRmHistory() {
+      const selStudent = document.getElementById('quick-student-select');
+      const studentId = selStudent ? selStudent.value : '';
+      const db = getOneRmDb();
+      const tbody = document.getElementById('onerm-history-body');
+      const placeholder = document.getElementById('onerm-empty-placeholder');
+      if (!tbody) return;
+
+      const filtered = studentId ? db.filter(item => item.studentId === studentId) : db;
+
+      if (!filtered || filtered.length === 0) {
+        tbody.innerHTML = '';
+        if (placeholder) placeholder.classList.remove('hidden');
+        return;
+      }
+
+      if (placeholder) placeholder.classList.add('hidden');
+      tbody.innerHTML = filtered.map(item => `
+        <tr class="hover:bg-dark-800/40 transition">
+          <td class="py-2 px-4 text-white">${item.date}</td>
+          <td class="py-2 px-4 font-sans font-bold text-slate-200">${item.exercise}</td>
+          <td class="py-2 px-4">${item.load} kg &times; ${item.reps} reps</td>
+          <td class="py-2 px-4 font-bold text-brand-400">${item.estimated1RM} kg</td>
+          <td class="py-2 px-4 text-amber-400">${item.relativeStrength}x</td>
+          <td class="py-2 px-4 text-right">
+            <button onclick="deleteOneRmEntry('${item.id}')" class="text-slate-500 hover:text-brand-400">&times;</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function deleteOneRmEntry(id) {
+      if (!confirm('Remover este registro de 1RM?')) return;
+      let db = getOneRmDb().filter(item => item.id !== id);
+      saveOneRmDb(db);
+      renderOneRmHistory();
+    }
+
+    function populateStudentSelectors() {
+      const students = getStudents();
+      const s1 = document.getElementById('quick-student-select');
+      const s2 = document.getElementById('history-student-select');
+      if (!s1 || !s2) return;
+      const cur1 = s1.value;
+      const cur2 = s2.value;
+
+      s1.innerHTML = '<option value="">Carregar Aluno Cadastrado...</option>';
+      s2.innerHTML = '<option value="">Selecione um aluno...</option>';
+
+      students.forEach(st => {
+        s1.innerHTML += `<option value="${st.id}">${st.name}</option>`;
+        s2.innerHTML += `<option value="${st.id}">${st.name}</option>`;
+      });
+
+      if (cur1) s1.value = cur1;
+      if (cur2) s2.value = cur2;
+    }
+
+    function renderStudentsTable() {
+      const students = getStudents();
+      const assessments = getAssessments();
+      const searchEl = document.getElementById('student-search-input');
+      const term = searchEl ? searchEl.value.toLowerCase() : '';
+      const tbody = document.getElementById('students-table-body');
+      const placeholder = document.getElementById('no-students-placeholder');
+      if (!tbody) return;
+
+      const filtered = students.filter(s => s.name.toLowerCase().includes(term));
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        if (placeholder) placeholder.classList.remove('hidden');
+        return;
+      }
+
+      if (placeholder) placeholder.classList.add('hidden');
+      tbody.innerHTML = filtered.map(s => {
+        const count = assessments.filter(a => a.studentId === s.id).length;
+        return `
+          <tr class="hover:bg-dark-800/50 transition">
+            <td class="py-3 px-4 font-bold text-white">${s.name}</td>
+            <td class="py-3 px-4">${s.age || '-'} anos / ${s.gender}</td>
+            <td class="py-3 px-4 font-mono">${s.weight ? s.weight + ' kg' : '-'}</td>
+            <td class="py-3 px-4 capitalize">${s.modality || 'Civil'}</td>
+            <td class="py-3 px-4 font-mono"><span class="px-2 py-0.5 bg-dark-900 border border-dark-700 rounded text-rose-300 font-bold">${count}</span></td>
+            <td class="py-3 px-4 text-right space-x-2">
+              <button onclick="loadStudentToEval('${s.id}')" class="px-2.5 py-1 bg-brand-600/80 hover:bg-brand-600 text-white rounded text-xs transition">Avaliar</button>
+              <button onclick="viewStudentHistory('${s.id}')" class="px-2.5 py-1 bg-dark-800 hover:bg-dark-750 text-slate-200 rounded text-xs transition">Histórico</button>
+              <button onclick="deleteStudent('${s.id}')" class="text-slate-500 hover:text-brand-400 text-xs transition">&times;</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openNewStudentModal() {
+      const mid = document.getElementById('modal-student-id'); if (mid) mid.value = '';
+      const mn = document.getElementById('modal-student-name'); if (mn) mn.value = '';
+      const ma = document.getElementById('modal-student-age'); if (ma) ma.value = '';
+      const mw = document.getElementById('modal-student-weight'); if (mw) mw.value = '';
+      const mp = document.getElementById('modal-student-phone'); if (mp) mp.value = '';
+      const mt = document.getElementById('student-modal-title'); if (mt) mt.innerText = 'Cadastrar Novo Aluno';
+      const modal = document.getElementById('student-modal'); if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeStudentModal() {
+      const modal = document.getElementById('student-modal'); if (modal) modal.classList.add('hidden');
+    }
+
+    function saveStudentFromModal() {
+      const nameInput = document.getElementById('modal-student-name');
+      const name = nameInput ? nameInput.value.trim() : '';
+      if (!name) { alert('Informe o nome do aluno.'); return; }
+
+      const idInput = document.getElementById('modal-student-id');
+      const id = (idInput && idInput.value) ? idInput.value : 'st_' + Date.now();
+      const ageInput = document.getElementById('modal-student-age');
+      const genderInput = document.getElementById('modal-student-gender');
+      const weightInput = document.getElementById('modal-student-weight');
+      const phoneInput = document.getElementById('modal-student-phone');
+      const modInput = document.getElementById('modal-student-modality');
+
+      const student = {
+        id,
+        name,
+        age: ageInput ? ageInput.value : '',
+        gender: genderInput ? genderInput.value : 'M',
+        weight: weightInput ? weightInput.value : '',
+        phone: phoneInput ? phoneInput.value : '',
+        modality: modInput ? modInput.value : 'civil',
+      };
+
+      let students = getStudents();
+      const idx = students.findIndex(s => s.id === id);
+      if (idx >= 0) students[idx] = student;
+      else students.push(student);
+
+      saveStudents(students);
+      closeStudentModal();
+    }
+
+    function deleteStudent(id) {
+      if (!confirm('Remover aluno e histórico?')) return;
+      saveStudents(getStudents().filter(s => s.id !== id));
+      saveAssessments(getAssessments().filter(a => a.studentId !== id));
+    }
+
+    function loadStudentToEval(id) {
+      if (!id) return;
+      const s = getStudents().find(x => x.id === id);
+      if (!s) return;
+
+      const n = document.getElementById('eval-name'); if (n) n.value = s.name;
+      const a = document.getElementById('eval-age'); if (a) a.value = s.age || '';
+      const g = document.getElementById('eval-gender'); if (g) g.value = s.gender || 'M';
+      const w = document.getElementById('eval-weight'); if (w) w.value = s.weight || '';
+      const bw = document.getElementById('onerm-bodyweight'); if (bw) bw.value = s.weight || '';
+      const m = document.getElementById('eval-modality'); if (m && s.modality) m.value = s.modality;
+      const q = document.getElementById('quick-student-select'); if (q) q.value = id;
+
+      switchTab('evaluation');
+      calculateAll();
+      calculateOneRm();
+      renderOneRmHistory();
+    }
+
+    function viewStudentHistory(id) {
+      const hSel = document.getElementById('history-student-select');
+      if (hSel) hSel.value = id;
+      switchTab('history');
+      renderHistoryCharts(id);
+    }
+
+    function saveCurrentAssessment() {
+      const nameInput = document.getElementById('eval-name');
+      const name = nameInput ? nameInput.value.trim() : '';
+      if (!name) { alert('Informe o nome do aluno antes de salvar.'); return; }
+
+      let students = getStudents();
+      let student = students.find(s => s.name.toLowerCase() === name.toLowerCase());
+      if (!student) {
+        student = {
+          id: 'st_' + Date.now(),
+          name,
+          age: (document.getElementById('eval-age') || {}).value || '',
+          gender: (document.getElementById('eval-gender') || {}).value || 'M',
+          weight: (document.getElementById('eval-weight') || {}).value || '',
+          modality: (document.getElementById('eval-modality') || {}).value || 'civil'
+        };
+        students.push(student);
+        saveStudents(students);
+      }
+
+      const dateEl = document.getElementById('eval-date');
+      const assessment = {
+        id: 'eval_' + Date.now(),
+        studentId: student.id,
+        date: dateEl ? dateEl.value : new Date().toISOString().split('T')[0],
+        weight: getVal('eval-weight'),
+        modality: (document.getElementById('eval-modality') || {}).value || 'civil',
+        context: (document.getElementById('eval-context') || {}).value || 'acsm',
+        quad: { l: Math.max(getVal('quad-l1'), getVal('quad-l2'), getVal('quad-l3')), r: Math.max(getVal('quad-r1'), getVal('quad-r2'), getVal('quad-r3')) },
+        ham: { l: Math.max(getVal('ham-l1'), getVal('ham-l2'), getVal('ham-l3')), r: Math.max(getVal('ham-r1'), getVal('ham-r2'), getVal('ham-r3')) },
+        press: { l: Math.max(getVal('press-l1'), getVal('press-l2'), getVal('press-l3')), r: Math.max(getVal('press-r1'), getVal('press-r2'), getVal('press-r3')) },
+        row: { l: Math.max(getVal('row-l1'), getVal('row-l2'), getVal('row-l3')), r: Math.max(getVal('row-r1'), getVal('row-r2'), getVal('row-r3')) },
+        pallof: { l: Math.max(getVal('pallof-l1'), getVal('pallof-l2'), getVal('pallof-l3')), r: Math.max(getVal('pallof-r1'), getVal('pallof-r2'), getVal('pallof-r3')) },
+        diagnostic: (document.getElementById('diagnostic-text') || {}).innerText || ''
+      };
+
+      let assessments = getAssessments();
+      assessments.push(assessment);
+      saveAssessments(assessments);
+
+      alert(`Avaliação de ${student.name} salva com sucesso!`);
+    }
+
+    let chartForceInstance = null;
+    let chartAsymInstance = null;
+
+    function renderHistoryCharts(studentId) {
+      if (!studentId) return;
+
+      const assessments = getAssessments()
+        .filter(a => a.studentId === studentId)
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      const labels = assessments.map(a => a.date);
+      const quadPeaks = assessments.map(a => Math.max(a.quad.l, a.quad.r));
+      const pressPeaks = assessments.map(a => Math.max(a.press.l, a.press.r));
+      const rowPeaks = assessments.map(a => Math.max(a.row.l, a.row.r));
+
+      const tbody = document.getElementById('history-table-body');
+      if (tbody) {
+        tbody.innerHTML = assessments.map(a => `
+          <tr class="hover:bg-dark-800 transition">
+            <td class="py-2 px-4 text-white">${a.date}</td>
+            <td class="py-2 px-4 uppercase text-slate-400">${a.modality}</td>
+            <td class="py-2 px-4">${a.quad.l.toFixed(1)} / ${a.quad.r.toFixed(1)} kg</td>
+            <td class="py-2 px-4">${a.ham.l.toFixed(1)} / ${a.ham.r.toFixed(1)} kg</td>
+            <td class="py-2 px-4">${a.press.l.toFixed(1)} / ${a.press.r.toFixed(1)} kg</td>
+            <td class="py-2 px-4">${a.row.l.toFixed(1)} / ${a.row.r.toFixed(1)} kg</td>
+            <td class="py-2 px-4">${a.pallof.l.toFixed(1)} / ${a.pallof.r.toFixed(1)} kg</td>
+            <td class="py-2 px-4 text-right">
+              <button onclick="deleteAssessment('${a.id}', '${studentId}')" class="text-slate-500 hover:text-brand-400">&times;</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      const canvasForce = document.getElementById('chart-force-history');
+      if (canvasForce) {
+        const ctxForce = canvasForce.getContext('2d');
+        if (chartForceInstance) chartForceInstance.destroy();
+        chartForceInstance = new Chart(ctxForce, {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [
+              { label: 'Quadríceps (kg)', data: quadPeaks, borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', tension: 0.3, fill: true },
+              { label: 'Supino (kg)', data: pressPeaks, borderColor: '#f43f5e', backgroundColor: 'rgba(244, 63, 94, 0.1)', tension: 0.3, fill: true },
+              { label: 'Remada (kg)', data: rowPeaks, borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', tension: 0.3, fill: true }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: { grid: { color: '#23141d' }, ticks: { color: '#fda4af' } },
+              y: { grid: { color: '#23141d' }, ticks: { color: '#fda4af' } }
+            },
+            plugins: { legend: { labels: { color: '#fecdd3' } } }
+          }
+        });
+      }
+
+      const canvasAsym = document.getElementById('chart-asym-history');
+      if (canvasAsym) {
+        const ctxAsym = canvasAsym.getContext('2d');
+        if (chartAsymInstance) chartAsymInstance.destroy();
+        chartAsymInstance = new Chart(ctxAsym, {
+          type: 'bar',
+          data: {
+            labels,
+            datasets: [
+              { label: 'Assimetria Quad (%)', data: assessments.map(a => calculateAsymmetry(a.quad.l, a.quad.r).diff), backgroundColor: '#f59e0b' },
+              { label: 'Assimetria Supino (%)', data: assessments.map(a => calculateAsymmetry(a.press.l, a.press.r).diff), backgroundColor: '#f43f5e' },
+              { label: 'Assimetria Remada (%)', data: assessments.map(a => calculateAsymmetry(a.row.l, a.row.r).diff), backgroundColor: '#10b981' }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: { grid: { color: '#23141d' }, ticks: { color: '#fda4af' } },
+              y: { grid: { color: '#23141d' }, ticks: { color: '#fda4af' }, max: 30 }
+            },
+            plugins: { legend: { labels: { color: '#fecdd3' } } }
+          }
+        });
+      }
+    }
+
+    function deleteAssessment(evalId, studentId) {
+      if (!confirm('Remover esta avaliação?')) return;
+      saveAssessments(getAssessments().filter(a => a.id !== evalId));
+      renderHistoryCharts(studentId);
+    }
+
+    function exportDataBackup() {
+      const data = { 
+        students: getStudents(), 
+        assessments: getAssessments(), 
+        oneRmRecords: getOneRmDb(),
+        exportDate: new Date().toISOString() 
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `isokin_backup_${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+    }
+
+    function importDataBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (imported.students) saveStudents(imported.students);
+          if (imported.assessments) saveAssessments(imported.assessments);
+          if (imported.oneRmRecords) saveOneRmDb(imported.oneRmRecords);
+          alert('Backup restaurado com sucesso!');
+          location.reload();
+        } catch (err) { alert('Erro ao processar arquivo de backup.'); }
+      };
+      reader.readAsText(file);
+    }
+
+    function openAiModal() {
+      const k = document.getElementById('ai-api-key'); if (k) k.value = localStorage.getItem('isokin_gemini_key') || '';
+      const m = document.getElementById('ai-model'); if (m) m.value = localStorage.getItem('isokin_gemini_model') || 'gemini-3.8-flash';
+      const modal = document.getElementById('ai-modal'); if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeAiModal() {
+      const modal = document.getElementById('ai-modal'); if (modal) modal.classList.add('hidden');
+    }
+
+    function saveAiConfig() {
+      const k = document.getElementById('ai-api-key');
+      const m = document.getElementById('ai-model');
+      if (k) localStorage.setItem('isokin_gemini_key', k.value.trim());
+      if (m) localStorage.setItem('isokin_gemini_model', m.value);
+      alert('Configuração salva com sucesso!');
+      closeAiModal();
+    }
+
+    async function generateAiReport() {
+      let apiKey = (localStorage.getItem('isokin_gemini_key') || '').trim();
+      let model = localStorage.getItem('isokin_gemini_model') || 'gemini-3.8-flash';
+
+      if (!apiKey) {
+        alert('Configure sua Chave de API no botão "API" antes de gerar.');
+        openAiModal();
+        return;
+      }
+
+      const btn = document.getElementById('btn-ai-gen');
+      if (btn) {
+        btn.innerText = 'Processando com Gemini...';
+        btn.disabled = true;
+      }
+
+      const payload = {
+        aluno: (document.getElementById('eval-name') || {}).value || 'Não informado',
+        massaCorporal: (document.getElementById('eval-weight') || {}).value || 'Não informado',
+        modalidade: (document.getElementById('eval-modality') || {}).value || 'civil',
+        contextoClinico: (document.getElementById('eval-context') || {}).value || 'acsm',
+        isometria: {
+          joelho: {
+            isquiosE: (document.getElementById('ham-l-peak') || {}).innerText || '0.0 kg',
+            isquiosD: (document.getElementById('ham-r-peak') || {}).innerText || '0.0 kg',
+            quadE: (document.getElementById('quad-l-peak') || {}).innerText || '0.0 kg',
+            quadD: (document.getElementById('quad-r-peak') || {}).innerText || '0.0 kg'
+          },
+          quadril: {
+            adutoresE: (document.getElementById('add-l-peak') || {}).innerText || '0.0 kg',
+            adutoresD: (document.getElementById('add-r-peak') || {}).innerText || '0.0 kg',
+            abdutoresE: (document.getElementById('abd-l-peak') || {}).innerText || '0.0 kg',
+            abdutoresD: (document.getElementById('abd-r-peak') || {}).innerText || '0.0 kg'
+          },
+          ombro: {
+            reE: (document.getElementById('er-l-peak') || {}).innerText || '0.0 kg',
+            reD: (document.getElementById('er-r-peak') || {}).innerText || '0.0 kg',
+            riE: (document.getElementById('ir-l-peak') || {}).innerText || '0.0 kg',
+            riD: (document.getElementById('ir-r-peak') || {}).innerText || '0.0 kg'
+          },
+          cotovelo: {
+            bicepsE: (document.getElementById('biceps-l-peak') || {}).innerText || '0.0 kg',
+            bicepsD: (document.getElementById('biceps-r-peak') || {}).innerText || '0.0 kg',
+            tricepsE: (document.getElementById('triceps-l-peak') || {}).innerText || '0.0 kg',
+            tricepsD: (document.getElementById('triceps-r-peak') || {}).innerText || '0.0 kg'
+          },
+          padraoHorizontal: {
+            supinoE: (document.getElementById('press-l-peak') || {}).innerText || '0.0 kg',
+            supinoD: (document.getElementById('press-r-peak') || {}).innerText || '0.0 kg',
+            remadaE: (document.getElementById('row-l-peak') || {}).innerText || '0.0 kg',
+            remadaD: (document.getElementById('row-r-peak') || {}).innerText || '0.0 kg'
+          },
+          corePallof: {
+            esquerdo: (document.getElementById('pallof-l-peak') || {}).innerText || '0.0 kg',
+            direito: (document.getElementById('pallof-r-peak') || {}).innerText || '0.0 kg'
+          }
+        },
+        forcaDinamica1RM: {
+          exercicio: (document.getElementById('onerm-exercise') || {}).value || 'Supino Reto',
+          umRmEstimado: (document.getElementById('onerm-result-peak') || {}).innerText + ' kg',
+          forcaRelativa: (document.getElementById('onerm-result-rel') || {}).innerText + 'x PC'
+        }
+      };
+
+      const promptText = `Você é um especialista em biomecânica e avaliação neuromuscular. Analise os dados da avaliação isométrica e de 1RM abaixo e elabore um parecer clínico direto, legível e profissional, integrando assimetrias e prescrição com cargas em kg quando disponíveis. REGRAS OBRIGATÓRIAS DE FORMATAÇÃO: 1. NUNCA use LaTeX, cifrões ($), barras ou fórmulas matemáticas (escreva sempre texto limpo como "32 kg", "40%", "graus"). 2. NÃO use tabelas Markdown (use tópicos claros e diretos com marcadores). 3. Use parágrafos objetivos e destaques em negrito simples:\n\n${JSON.stringify(payload, null, 2)}`;
+
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+        
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'x-goog-api-key': apiKey
+          },
+          body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+          alert('Erro retornado pela Google (' + (data.error.status || 'Falha') + '):\n\n' + data.error.message);
+          return;
+        }
+
+        if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
+          let rawText = data.candidates[0].content.parts[0].text;
+          let cleanText = rawText
+            .replace(/\$+\\text\{([^}]+)\}\$+/g, '$1')
+            .replace(/\$+/g, '')
+            .replace(/\\text\{([^}]+)\}/g, '$1')
+            .replace(/\\ge/g, '≥')
+            .replace(/\\le/g, '≤')
+            .replace(/\\circ/g, '°');
+
+          const diagEl = document.getElementById('diagnostic-text');
+          if (diagEl) {
+            diagEl.innerHTML = `
+              <div class="border-l-4 border-brand-500 pl-3 py-1 bg-dark-900 rounded">
+                <span class="text-xs font-mono font-bold text-brand-400 uppercase tracking-wide block mb-1">Parecer Gerado via Gemini (${model}):</span>
+                <div class="text-slate-200 whitespace-pre-line text-xs sm:text-sm leading-relaxed">${cleanText}</div>
+              </div>
+            `;
+          }
+        } else {
+          alert('Resposta incompleta da API: ' + JSON.stringify(data));
+        }
+      } catch (err) {
+        alert('Falha na comunicação com a API: ' + err.message);
+      } finally {
+        if (btn) {
+          btn.innerText = 'Gerar Parecer via Google AI Studio';
+          btn.disabled = false;
+        }
+      }
+    }
+
+    // REGISTRO GLOBAL SEGURO PARA EVENTOS ONCLICK
+    window.switchTab = switchTab;
+    window.filterJoint = filterJoint;
+    window.calculateAll = calculateAll;
+    window.calculateOneRm = calculateOneRm;
+    window.saveOneRmEntry = saveOneRmEntry;
+    window.deleteOneRmEntry = deleteOneRmEntry;
+    window.openNewStudentModal = openNewStudentModal;
+    window.closeStudentModal = closeStudentModal;
+    window.saveStudentFromModal = saveStudentFromModal;
+    window.deleteStudent = deleteStudent;
+    window.loadStudentToEval = loadStudentToEval;
+    window.viewStudentHistory = viewStudentHistory;
+    window.saveCurrentAssessment = saveCurrentAssessment;
+    window.deleteAssessment = deleteAssessment;
+    window.exportDataBackup = exportDataBackup;
+    window.importDataBackup = importDataBackup;
+    window.openAiModal = openAiModal;
+    window.closeAiModal = closeAiModal;
+    window.saveAiConfig = saveAiConfig;
+    window.generateAiReport = generateAiReport;
+
+    // INICIALIZAÇÃO SEGURA APÓS CARREGAMENTO DO DOM
+    window.addEventListener('DOMContentLoaded', () => {
+      const evalDate = document.getElementById('eval-date');
+      if (evalDate && !evalDate.value) {
+        evalDate.value = new Date().toISOString().split('T')[0];
+      }
+      populateStudentSelectors();
+      renderStudentsTable();
+      calculateAll();
+      calculateOneRm();
+    });
+  </script>
+</body>
+</html>
